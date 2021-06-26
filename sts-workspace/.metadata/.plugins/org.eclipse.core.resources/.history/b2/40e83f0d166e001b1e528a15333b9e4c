@@ -1,0 +1,35 @@
+package com.lyncwork.services.dropbox.client.dropbox.histrix.teamfolder;
+
+import com.lyncwork.services.dropbox.client.dropbox.client.teamfolder.TeamFolderClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.info.GetInfoTeamFolderRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.list.ListTeamFolderRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.teamfolder.info.InfoTeamFolder;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.teamfolder.list.GetNamespcesResponse;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+
+@Component
+public class TeamFolderFallback implements TeamFolderClientFeign {
+
+	@Override
+	public InfoTeamFolder getList( ListTeamFolderRequest request){
+		return null;
+	}
+
+	@Override
+	public List<InfoTeamFolder> getInfo( GetInfoTeamFolderRequest request) {
+		return null;
+	}
+
+
+	@Override
+	public GetNamespcesResponse getNamespaces( String emptyJson){
+		return null;
+	}
+
+}
+
+
+

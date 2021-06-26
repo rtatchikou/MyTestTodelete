@@ -1,0 +1,164 @@
+package com.lyncwork.services.dropbox.client.dropbox.service.impl;
+
+
+import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lyncwork.services.hellosign.client.dropbox.client.auth.AuthClient;
+import com.lyncwork.services.hellosign.client.dropbox.domaine.Auth;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.AuthTokenResponse;
+import com.lyncwork.services.hellosign.client.dropbox.repository.AuthRepository;
+import com.lyncwork.services.hellosign.client.dropbox.service.AuthService;
+import com.lyncwork.services.hellosign.errors.InternalBusinessException;
+import com.lyncwork.services.hellosign.service.CompanyService;
+
+import java.net.URI;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+@Component
+@Transactional
+public class AuthTokenServiceImpl implements AuthService {
+    private static final Logger logger = LoggerFactory.getLogger(AuthTokenServiceImpl.class);
+
+    @Autowired
+    private AuthClient authClient;
+
+    @Autowired
+    private AuthRepository authRepository;
+
+    @Value("${dropbox.app_key}")
+    private String clientId;
+
+    @Value("${dropbox.redirect_url}")
+    private String redirectUrl;
+
+    @Value("${dropbox.oauth.authorize.url}")
+    private String authorizeUrl;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Override
+    public Auth getNewToken(String code) {
+        logger.debug("Going to get new token for client id {}", clientId);
+        Map<String, String> request = new HashMap<>();
+        request.put("code", code);
+        request.put("grant_type", "authorization_code");
+        request.put("redirect_uri", redirectUrl);
+        AuthTokenResponse response = null;
+        logger.debug("Auth token request: {}", request);
+        try {
+             response = authClient.getAccessToken(request);
+        }catch(Exception e){
+           logger.error(e.getMessage(), e);
+           throw new InternalBusinessException(messageSource.getMessage("dropbox.file.unexpected.error", new String[]{e.getMessage()}, null), AuthTokenServiceImpl.class.getSimpleName(), "AuthTokenService");
+        }
+        if(response != null) {
+            return storeToken(response);
+        }
+        logger.warn("Token is not created!");
+        return null;
+    }
+
+    @Transactional(readOnly=false)
+    @Override
+    public String getToken() {
+
+       Optional<Auth> optionalAuth = authRepository.findByClientId(clientId);
+
+       if(optionalAuth.isEmpty()){
+           logger.error("Missing Auth data for client: {}", clientId);
+           throw new InternalBusinessException(messageSource.getMessage("dropbox.file.unexpected.error", new String[]{"Missing Auth data"}, null), AuthTokenServiceImpl.class.getSimpleName(), "AuthTokenService");
+       }
+       Auth auth = optionalAuth.get();
+
+       if(!auth.validToken()) {
+            logger.warn("Token is expired, going to refresh new one!");
+            auth = refreshToken(auth);
+       }
+       return auth.getAccessToken();
+
+    }
+
+    private Auth refreshToken(Auth auth) {
+        Map<String, String> request = new HashMap<>();
+        request.put("refresh_token", auth.getRefreshToken());
+        request.put("grant_type", "refresh_token");
+
+        AuthTokenResponse response = authClient.refreshToken(request);
+        if(response == null) {
+            logger.error("Not able to refresh token: {}", request);
+            throw new InternalBusinessException(messageSource.getMessage("dropbox.file.unexpected.error", new String[]{"Not able to refresh token"}, null), AuthTokenServiceImpl.class.getSimpleName(), "AuthTokenService");
+        }
+
+        return updateToken(response, auth);
+    }
+
+
+    private Auth updateToken(AuthTokenResponse response, Auth auth) {
+        Instant now = Instant.now();
+        auth.setAccessToken(response.getAccessToken());
+        auth.setExpiresIn(response.getExpiresIn());
+        auth.setTokenExpiredAt(now.plusSeconds(response.getExpiresIn()));
+
+        authRepository.save(auth);
+
+        return auth;
+    }
+
+    public URI getCodeURI()  {
+
+        URI  uri =null ;
+        try {
+            uri = new URIBuilder(authorizeUrl).build();
+            uri = new URIBuilder(uri)
+                    .addParameter("client_id", clientId)
+                    .addParameter("response_type", "code")
+                    .addParameter("token_access_type", "offline")
+                    .addParameter("redirect_uri", redirectUrl).build();
+
+        }catch (Exception e){
+            logger.error(e.getMessage(), e);
+            throw new InternalBusinessException(messageSource.getMessage("dropbox.file.unexpected.error", new String[]{e.getMessage()}, null), AuthTokenServiceImpl.class.getSimpleName(), "AuthTokenService");
+        }
+
+        return uri;
+    }
+
+    private Auth storeToken(AuthTokenResponse response) {
+
+        Optional<Auth>  optionalAuth= authRepository.findByClientId(clientId);
+
+        if(optionalAuth.isPresent()){
+            logger.info("Updating auth data for client with if: {}", clientId);
+            return updateToken(response, optionalAuth.get());
+        }
+
+        logger.info("Creating auth data for client with if: {}", clientId);
+        Instant now = Instant.now();
+        Auth auth = new Auth();
+        auth.setAccessToken(response.getAccessToken());
+        auth.setClientId(clientId);
+        auth.setExpiresIn(response.getExpiresIn());
+        auth.setScope(response.getScope());
+        auth.setTeamId(response.getTeamId());
+        auth.setRefreshToken(response.getRefreshToken());
+        auth.setTokenType(response.getTokenType());
+        auth.setCreatedAt(now);
+        auth.setTokenExpiredAt(now.plusSeconds(response.getExpiresIn()));
+
+        authRepository.save(auth);
+        logger.info("Token created!");
+        return auth;
+    }
+}
+

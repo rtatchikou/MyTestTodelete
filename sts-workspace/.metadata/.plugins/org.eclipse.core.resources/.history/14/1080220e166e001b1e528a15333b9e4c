@@ -1,0 +1,43 @@
+package com.lyncwork.services.dropbox.domain.enumeration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public enum UserRole {
+
+    ADMIN("ADMIN"),
+    MEMBER("MEMBER");
+
+    UserRole(String value) {
+        this.value = value;
+    }
+
+    private final String value;
+
+    private static List<String> constants = new ArrayList<>();
+    static {
+        for (UserRole c : values()) {
+            constants.add(c.value.toLowerCase());
+        }
+    }
+
+    public static List<String> getStringValues() {
+        return constants;
+    }
+
+    public String getValue(){
+        return value;
+    }
+
+    public static UserRole getUserStatus(String role){
+        for (UserRole userRole : values()) {
+           if( userRole.value.equalsIgnoreCase(role)){
+
+               return userRole;
+           }
+        }
+       throw new IllegalArgumentException("RoleStatus "+role+ " is not define" );
+
+    }
+
+}

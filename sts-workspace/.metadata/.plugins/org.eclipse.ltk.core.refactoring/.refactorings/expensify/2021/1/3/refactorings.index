@@ -1,0 +1,9 @@
+1610378152632	Rename package 'com.lyncwork.services.expensify'
+1610379047416	Rename package 'com.lyncwork.services.dropbox.client.expensify.model.response'
+1610379166021	Rename package 'com.lyncwork.services.dropbox.client.expensify.service'
+1610379194260	Rename package 'com.lyncwork.services.dropbox.client.expensify.client'
+1610379230523	Rename package 'com.lyncwork.services.dropbox.client.expensify.config'
+1610386723374	Move compilation units
+1610386807095	Delete element
+1610386836532	Rename package 'com.lyncwork.services.dropbox.client.expensify.model'
+1610388465972	Delete element

@@ -1,0 +1,209 @@
+package com.lyncwork.services.dropbox.service.mapper;
+
+import com.lyncwork.services.dropbox.domain.Company;
+import com.lyncwork.services.dropbox.domain.File;
+import com.lyncwork.services.dropbox.domain.User;
+import com.lyncwork.services.dropbox.service.dto.CompanyDTO;
+import com.lyncwork.services.dropbox.service.dto.FileDTO;
+import com.lyncwork.services.dropbox.service.dto.UserDTO;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2021-01-29T16:16:10-0500",
+    comments = "version: 1.3.1.Final, compiler: Eclipse JDT (IDE) 1.3.1100.v20200828-0941, environment: Java 15 (Oracle Corporation)"
+)
+@Component
+public class UserMapperImpl implements UserMapper {
+
+    @Override
+    public List<User> toEntity(List<UserDTO> dtoList) {
+        if ( dtoList == null ) {
+            return null;
+        }
+
+        List<User> list = new ArrayList<User>( dtoList.size() );
+        for ( UserDTO userDTO : dtoList ) {
+            list.add( toEntity( userDTO ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<UserDTO> toDto(List<User> entityList) {
+        if ( entityList == null ) {
+            return null;
+        }
+
+        List<UserDTO> list = new ArrayList<UserDTO>( entityList.size() );
+        for ( User user : entityList ) {
+            list.add( toDto( user ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public UserDTO toDto(User entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( entity.getId() );
+        userDTO.setEmailPrimary( entity.getEmailPrimary() );
+        userDTO.setUsername( entity.getUsername() );
+        userDTO.setCompany( companyToCompanyDTO( entity.getCompany() ) );
+        userDTO.setUserRole( entity.getUserRole() );
+        userDTO.setFileSheredWithUser( fileSetToFileDTOSet( entity.getFileSheredWithUser() ) );
+        userDTO.setFilesOwnedByUser( fileSetToFileDTOSet( entity.getFilesOwnedByUser() ) );
+
+        return userDTO;
+    }
+
+    @Override
+    public User toEntity(UserDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        User user = new User();
+
+        user.setId( dto.getId() );
+        user.setEmailPrimary( dto.getEmailPrimary() );
+        user.setUsername( dto.getUsername() );
+        user.setCompany( companyDTOToCompany( dto.getCompany() ) );
+        user.setUserRole( dto.getUserRole() );
+        user.setFileSheredWithUser( fileDTOSetToFileSet( dto.getFileSheredWithUser() ) );
+        user.setFilesOwnedByUser( fileDTOSetToFileSet( dto.getFilesOwnedByUser() ) );
+
+        return user;
+    }
+
+    protected CompanyDTO companyToCompanyDTO(Company company) {
+        if ( company == null ) {
+            return null;
+        }
+
+        CompanyDTO companyDTO = new CompanyDTO();
+
+        companyDTO.setId( company.getId() );
+        companyDTO.setTenantId( company.getTenantId() );
+        companyDTO.setCompanyName( company.getCompanyName() );
+        companyDTO.setTeamFolderName( company.getTeamFolderName() );
+        companyDTO.setTeamFolderNameSpaceId( company.getTeamFolderNameSpaceId() );
+
+        return companyDTO;
+    }
+
+    protected Set<UserDTO> userSetToUserDTOSet(Set<User> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<UserDTO> set1 = new HashSet<UserDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( User user : set ) {
+            set1.add( toDto( user ) );
+        }
+
+        return set1;
+    }
+
+    protected FileDTO fileToFileDTO(File file) {
+        if ( file == null ) {
+            return null;
+        }
+
+        FileDTO fileDTO = new FileDTO();
+
+        fileDTO.setId( file.getId() );
+        fileDTO.setFileName( file.getFileName() );
+        fileDTO.setFilePath( file.getFilePath() );
+        fileDTO.setFileOwner( toDto( file.getFileOwner() ) );
+        fileDTO.setSharers( userSetToUserDTOSet( file.getSharers() ) );
+        fileDTO.setDropboxFileId( file.getDropboxFileId() );
+        fileDTO.setExternalGroupId( file.getExternalGroupId() );
+
+        return fileDTO;
+    }
+
+    protected Set<FileDTO> fileSetToFileDTOSet(Set<File> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<FileDTO> set1 = new HashSet<FileDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( File file : set ) {
+            set1.add( fileToFileDTO( file ) );
+        }
+
+        return set1;
+    }
+
+    protected Company companyDTOToCompany(CompanyDTO companyDTO) {
+        if ( companyDTO == null ) {
+            return null;
+        }
+
+        Company company = new Company();
+
+        company.setId( companyDTO.getId() );
+        company.setTenantId( companyDTO.getTenantId() );
+        company.setCompanyName( companyDTO.getCompanyName() );
+        company.setTeamFolderName( companyDTO.getTeamFolderName() );
+        company.setTeamFolderNameSpaceId( companyDTO.getTeamFolderNameSpaceId() );
+
+        return company;
+    }
+
+    protected Set<User> userDTOSetToUserSet(Set<UserDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<User> set1 = new HashSet<User>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( UserDTO userDTO : set ) {
+            set1.add( toEntity( userDTO ) );
+        }
+
+        return set1;
+    }
+
+    protected File fileDTOToFile(FileDTO fileDTO) {
+        if ( fileDTO == null ) {
+            return null;
+        }
+
+        File file = new File();
+
+        file.setId( fileDTO.getId() );
+        file.setFileName( fileDTO.getFileName() );
+        file.setFilePath( fileDTO.getFilePath() );
+        file.setDropboxFileId( fileDTO.getDropboxFileId() );
+        file.setExternalGroupId( fileDTO.getExternalGroupId() );
+        file.setFileOwner( toEntity( fileDTO.getFileOwner() ) );
+        file.setSharers( userDTOSetToUserSet( fileDTO.getSharers() ) );
+
+        return file;
+    }
+
+    protected Set<File> fileDTOSetToFileSet(Set<FileDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<File> set1 = new HashSet<File>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( FileDTO fileDTO : set ) {
+            set1.add( fileDTOToFile( fileDTO ) );
+        }
+
+        return set1;
+    }
+}

@@ -1,0 +1,78 @@
+package xyz.pakwo.dropbox;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+import lombok.extern.slf4j.Slf4j;
+import xyz.pakwo.dropbox.group.GroupFeature;
+import xyz.pakwo.dropbox.group.GroupFeatureOption;
+import xyz.pakwo.dropbox.member.MemberFeature;
+import xyz.pakwo.dropbox.member.MemberFeatureOption;
+import xyz.pakwo.dropbox.teamfolder.TeamFolderFeature;
+import xyz.pakwo.dropbox.teamfolder.TeamFolderFeatureOption;
+
+@SpringBootApplication
+@EnableFeignClients
+@Slf4j
+public class DropboxIntegrationApplication implements CommandLineRunner {
+
+	@Autowired
+	private MemberFeature memberFeature;
+	
+	@Autowired
+	private TeamFolderFeature teamFolderFeature;
+	
+	@Autowired
+	private GroupFeature groupFeature;
+	
+	public static void main(String[] args) {
+		SpringApplication.run(DropboxIntegrationApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+
+		/**** membership feature ***/
+		memberFeature.setOption(MemberFeatureOption.LIST);
+		memberFeature.action();
+		
+		//will create new member, max limit is 5
+		memberFeature.setOption(MemberFeatureOption.ADD);
+//		memberFeature.action(); 
+		
+		memberFeature.setOption(MemberFeatureOption.REMOVE);
+//		memberFeature.action();
+		
+		memberFeature.setOption(MemberFeatureOption.RECOVER);
+//		memberFeature.action();
+		
+		/**** resource ****/
+		teamFolderFeature.setOption(TeamFolderFeatureOption.LIST_FOLDER);
+		teamFolderFeature.action();
+		
+		teamFolderFeature.setOption(TeamFolderFeatureOption.GET_INFO_FOLDER);
+		teamFolderFeature.action();
+		
+		//FIXME : currently hit same error as postman : You can’t create a team folder for this team
+		teamFolderFeature.setOption(TeamFolderFeatureOption.CREATE_FOLDER);
+//		teamFolderFeature.action();
+		
+		
+		/**** groups ****/
+		groupFeature.setOption(GroupFeatureOption.LIST);
+		groupFeature.action();
+		
+		groupFeature.setOption(GroupFeatureOption.CREATE);
+		groupFeature.action();
+		
+		log.info("Job completed. Will terminate the system.");
+		System.exit(0);
+		
+	}
+
+	
+
+}

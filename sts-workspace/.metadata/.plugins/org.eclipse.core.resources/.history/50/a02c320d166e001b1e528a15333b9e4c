@@ -1,0 +1,55 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.response.group.list;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.group.GroupInfoResponse;
+
+import java.util.List;
+
+
+@JsonInclude(Include.NON_NULL)
+public class GroupListResponse {
+	
+	@JsonProperty("groups")
+	private List<GroupInfoResponse> groups;
+
+	@JsonProperty("cursor")
+	private String cursor;
+	
+	@JsonProperty("has_more")
+	private boolean hasMore;
+
+	public List<GroupInfoResponse> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<GroupInfoResponse> groups) {
+		this.groups = groups;
+	}
+
+	public String getCursor() {
+		return cursor;
+	}
+
+	public void setCursor(String cursor) {
+		this.cursor = cursor;
+	}
+
+	public boolean isHasMore() {
+		return hasMore;
+	}
+
+	public void setHasMore(boolean hasMore) {
+		this.hasMore = hasMore;
+	}
+
+	@Override
+	public String toString() {
+		return "GroupListResponse{" +
+				"groups=" + groups +
+				", cursor='" + cursor + '\'' +
+				", hasMore=" + hasMore +
+				'}';
+	}
+}

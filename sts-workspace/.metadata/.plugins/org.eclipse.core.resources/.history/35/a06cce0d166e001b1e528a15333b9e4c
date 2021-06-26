@@ -1,0 +1,38 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.response.member.delete;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+@JsonInclude(Include.NON_NULL)
+public class DeleteResponse {
+	
+	@JsonProperty(".tag")
+	private String tag;
+	
+	@JsonProperty("async_job_id")
+	private String asyncJobId;
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getAsyncJobId() {
+		return asyncJobId;
+	}
+
+	public void setAsyncJobId(String asyncJobId) {
+		this.asyncJobId = asyncJobId;
+	}
+
+	@Override
+	public String toString() {
+		return "DeleteResponse{" +
+				"tag='" + tag + '\'' +
+				", asyncJobId='" + asyncJobId + '\'' +
+				'}';
+	}
+}

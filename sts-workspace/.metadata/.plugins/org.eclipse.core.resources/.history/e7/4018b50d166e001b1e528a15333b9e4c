@@ -1,0 +1,52 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+@JsonInclude(Include.NON_NULL)
+public class Namespace {
+
+	@JsonProperty("namespace_id")
+	private String namespaceId;
+
+	@JsonProperty("name")
+	private String name;
+
+	@JsonProperty("namespace_type")
+	private NamespaceType namespaceType;
+
+	public String getNamespaceId() {
+		return namespaceId;
+	}
+
+	public void setNamespaceId(String namespaceId) {
+		this.namespaceId = namespaceId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public NamespaceType getNamespaceType() {
+		return namespaceType;
+	}
+
+	public void setNamespaceType(NamespaceType namespaceType) {
+		this.namespaceType = namespaceType;
+	}
+
+	@Override
+	public String toString() {
+		return "Namespace{" +
+				"namespaceId='" + namespaceId + '\'' +
+				", name='" + name + '\'' +
+				", namespaceType=" + namespaceType +
+				'}';
+	}
+}

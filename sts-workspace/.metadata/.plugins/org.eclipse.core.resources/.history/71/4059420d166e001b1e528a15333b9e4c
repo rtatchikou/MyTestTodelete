@@ -1,0 +1,100 @@
+package com.lyncwork.services.dropbox.domain;
+
+import com.lyncwork.services.dropbox.domain.enumeration.UserRole;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
+/**
+ * A Company.
+ */
+@Entity
+@Table(name = "user")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Email
+    @Column(name = "email_primary")
+    private String emailPrimary;
+
+    @NotBlank
+    @Column(name = "username")
+    private String username;
+
+    @ManyToOne
+    private Company company;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role")
+    private UserRole userRole;
+
+  //  @ManyToMany(mappedBy = "sharers", fetch = FetchType.LAZY)
+   // private Set<File>  fileSheredWithUser= new HashSet<>();
+
+  //  @OneToMany(mappedBy = "fileOwner", fetch = FetchType.LAZY)
+  //  private Set<File>  filesOwnedByUser = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmailPrimary() {
+        return emailPrimary;
+    }
+
+    public void setEmailPrimary(String emailPrimary) {
+        this.emailPrimary = emailPrimary;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", emailPrimary='" + emailPrimary + '\'' +
+                ", username='" + username + '\'' +
+                ", company=" + company +
+                ", userRole=" + userRole +
+                '}';
+    }
+}

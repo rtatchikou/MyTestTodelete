@@ -1,0 +1,91 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.request.member.delete;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.member.TransferAdminIdRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.member.TransferDestIdRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.member.UserRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class DeleteMemberRequest {
+	
+	@JsonProperty("user")
+	private UserRequest user;
+	
+	@JsonProperty("wipe_data")
+	private boolean wipeData;
+
+	@JsonProperty("transfer_dest_id")
+	private TransferDestIdRequest transferDestId;
+	
+	@JsonProperty("transfer_admin_id")
+	private TransferAdminIdRequest transferAdminId;
+	
+	@JsonProperty("keep_account")
+	private boolean keepAccount;
+	
+	@JsonProperty("retain_team_shares")
+	private boolean retainTeamShares;
+
+	public UserRequest getUser() {
+		return user;
+	}
+
+	public void setUser(UserRequest user) {
+		this.user = user;
+	}
+
+	public boolean isWipeData() {
+		return wipeData;
+	}
+
+	public void setWipeData(boolean wipeData) {
+		this.wipeData = wipeData;
+	}
+
+	public TransferDestIdRequest getTransferDestId() {
+		return transferDestId;
+	}
+
+	public void setTransferDestId(TransferDestIdRequest transferDestId) {
+		this.transferDestId = transferDestId;
+	}
+
+	public TransferAdminIdRequest getTransferAdminId() {
+		return transferAdminId;
+	}
+
+	public void setTransferAdminId(TransferAdminIdRequest transferAdminId) {
+		this.transferAdminId = transferAdminId;
+	}
+
+	public boolean isKeepAccount() {
+		return keepAccount;
+	}
+
+	public void setKeepAccount(boolean keepAccount) {
+		this.keepAccount = keepAccount;
+	}
+
+	public boolean isRetainTeamShares() {
+		return retainTeamShares;
+	}
+
+	public void setRetainTeamShares(boolean retainTeamShares) {
+		this.retainTeamShares = retainTeamShares;
+	}
+
+	@Override
+	public String toString() {
+		return "DeleteMemberRequest{" +
+				"user=" + user +
+				", wipeData=" + wipeData +
+				", transferDestId=" + transferDestId +
+				", transferAdminId=" + transferAdminId +
+				", keepAccount=" + keepAccount +
+				", retainTeamShares=" + retainTeamShares +
+				'}';
+	}
+}
+

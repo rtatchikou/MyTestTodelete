@@ -1,0 +1,19 @@
+package com.lyncwork.services.gusto.repository;
+
+import com.lyncwork.services.gusto.domain.UserIntegrationQueue;
+import com.lyncwork.services.gusto.domain.UserIntegrationStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+
+/**
+ * Spring Data  repository for the UserIntegrationQueue entity.
+ */
+
+@Repository
+public interface UserIntegrationQueueRepository extends JpaRepository<UserIntegrationQueue, Long> {
+
+    List<UserIntegrationQueue> findAllByConsumerIgnoreCaseAndStatus(String consumer, UserIntegrationStatus status);
+}

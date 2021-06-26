@@ -1,0 +1,18 @@
+package com.efunzo.be.training;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Door door = new Door(false);
+		Tire tire = new Tire(18);
+		Engine engine = new Engine(4, false);
+		
+		Car car = new Car("toyota", door, engine, tire);
+		
+		System.out.println(car);
+		
+
+	}
+
+}

@@ -1,0 +1,28 @@
+package com.lyncwork.services.dropbox.domain;
+
+import javax.annotation.Generated;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+
+@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
+@StaticMetamodel(Company.class)
+public abstract class Company_ {
+
+	public static volatile SingularAttribute<Company, String> perentSharedFolderId;
+	public static volatile SingularAttribute<Company, String> teamFolderName;
+	public static volatile SingularAttribute<Company, String> teamFolderNameSpaceId;
+	public static volatile SingularAttribute<Company, String> companyName;
+	public static volatile SingularAttribute<Company, String> tenantId;
+	public static volatile SingularAttribute<Company, Long> id;
+	public static volatile SingularAttribute<Company, String> folderId;
+
+	public static final String PERENT_SHARED_FOLDER_ID = "perentSharedFolderId";
+	public static final String TEAM_FOLDER_NAME = "teamFolderName";
+	public static final String TEAM_FOLDER_NAME_SPACE_ID = "teamFolderNameSpaceId";
+	public static final String COMPANY_NAME = "companyName";
+	public static final String TENANT_ID = "tenantId";
+	public static final String ID = "id";
+	public static final String FOLDER_ID = "folderId";
+
+}
+

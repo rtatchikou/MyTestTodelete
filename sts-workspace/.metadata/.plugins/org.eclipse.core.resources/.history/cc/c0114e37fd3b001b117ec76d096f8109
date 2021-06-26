@@ -1,0 +1,4 @@
+/**
+ * Audit specific code.
+ */
+package com.lyncwork.services.gusto.config.audit;

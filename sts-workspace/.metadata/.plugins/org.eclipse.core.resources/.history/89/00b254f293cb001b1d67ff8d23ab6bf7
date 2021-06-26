@@ -1,0 +1,16 @@
+package com.ifunzo.be.training;
+
+
+public class Car {
+	
+	private int doors;
+	private int wheeles;
+	private String model;
+	private String engine;
+	private String colour;
+	
+	public String getColour() {
+		return colour;
+	}
+
+}

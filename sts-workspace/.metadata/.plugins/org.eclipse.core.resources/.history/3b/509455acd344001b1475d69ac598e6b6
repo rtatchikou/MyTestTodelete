@@ -1,0 +1,49 @@
+package com.lyncwork.services.expensify.client.expensify.payload.request;
+
+public class GetPolicyListUserInputSettings {
+    private String type;
+    private  boolean adminOnly;
+    private String userEmail;
+
+    public GetPolicyListUserInputSettings() {
+    }
+
+    public GetPolicyListUserInputSettings(String type, boolean adminOnly, String userEmail) {
+        this.type = type;
+        this.adminOnly = adminOnly;
+        this.userEmail = userEmail;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isAdminOnly() {
+        return adminOnly;
+    }
+
+    public void setAdminOnly(boolean adminOnly) {
+        this.adminOnly = adminOnly;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    @Override
+    public String toString() {
+        return "GetPolicyListUserInputSettings{" +
+                "type='" + type + '\'' +
+                ", adminOnly=" + adminOnly +
+                ", userEmail='" + userEmail + '\'' +
+                '}';
+    }
+}

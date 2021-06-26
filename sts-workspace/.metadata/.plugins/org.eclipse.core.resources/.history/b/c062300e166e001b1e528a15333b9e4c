@@ -1,0 +1,53 @@
+package com.lyncwork.services.dropbox.model.response;
+
+import java.io.Serializable;
+
+public class FileInfo implements Serializable {
+
+    private String  id;
+    private String name;
+    private Long size;
+    private Boolean isDownloadable;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public Boolean getDownloadable() {
+        return isDownloadable;
+    }
+
+    public void setDownloadable(Boolean downloadable) {
+        isDownloadable = downloadable;
+    }
+
+    @Override
+    public String toString() {
+        return "FileInfo{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", size=" + size +
+                ", isDownloadable=" + isDownloadable +
+                '}';
+    }
+}

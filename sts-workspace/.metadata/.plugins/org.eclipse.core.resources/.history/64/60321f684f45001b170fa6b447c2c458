@@ -1,0 +1,32 @@
+package com.multipart.multipart;
+
+
+import java.io.File;
+import java.util.Map;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+
+import com.multipart.multipart.request.response.GetPolicyListResponse;
+import com.multipart.multipart.request.response.ProvisionUserResponse;
+
+import feign.Headers;
+
+@FeignClient(value = "expensifyClient",
+    url="https://integrations.expensify.com",
+    configuration = ServiceClientConfig.class,
+    fallback = ExpensifyFallback.class
+)
+public interface ExpensifyClient {
+
+    @PostMapping("/Integration-Server/ExpensifyIntegrations")
+    @Headers("Content-Type: multipart/form-data")
+    ProvisionUserResponse provisionUser(@RequestPart("requestJobDescription") String requestJobDescription, @RequestParam("data") File data);
+
+    @PostMapping("/Integration-Server/ExpensifyIntegrations")
+    @Headers({"Content-Type: multipart/form-data", "Accept: application/json"})
+    String getPolicyList(Map<String, ?> requestJobDescription);
+
+}

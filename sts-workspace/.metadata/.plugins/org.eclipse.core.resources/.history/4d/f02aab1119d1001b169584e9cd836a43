@@ -1,0 +1,19 @@
+package com.efunzo.be.trainig;
+
+public class TheMasque extends Movie {
+
+	public TheMasque() {
+		super("TheMasque");
+		
+	}
+	
+    private String getDescription() {
+		
+		return "The TheMasque is good movi ... ";
+	}
+	
+	private int getDuration() {
+		
+		return 3454636;
+	}
+}

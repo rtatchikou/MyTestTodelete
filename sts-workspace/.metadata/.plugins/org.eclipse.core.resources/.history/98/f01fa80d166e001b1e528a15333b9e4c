@@ -1,0 +1,27 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.info;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GetInfoTeamFolderRequest {
+
+	@JsonProperty("team_folder_ids")
+	private List<String> teamFolderIds = new ArrayList<>();
+
+	public List<String> getTeamFolderIds() {
+		return teamFolderIds;
+	}
+
+	public void setTeamFolderIds(List<String> teamFolderIds) {
+		this.teamFolderIds = teamFolderIds;
+	}
+
+	@Override
+	public String toString() {
+		return "GetInfoTeamFolderRequest{" +
+				"teamFolderIds=" + teamFolderIds +
+				'}';
+	}
+}

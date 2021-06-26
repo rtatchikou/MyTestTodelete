@@ -1,0 +1,19 @@
+package com.lyncwork.services.dropbox.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.lyncwork.services.hellosign.domain.File;
+
+
+/**
+ * Spring Data  repository for the File entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface FileRepository extends JpaRepository<File, Long> {
+
+    File findByFilePath(String filePath);
+
+    File findByDropboxFileId(String dropboxFileId);
+}

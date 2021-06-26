@@ -1,0 +1,33 @@
+package com.lyncwork.services.hellosign.client.dropbox.histrix.group;
+
+import org.springframework.stereotype.Component;
+
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.add.AddGroupMemberRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.add.CreateGroupRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.list.GroupListRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.group.add.CreateGroupResponse;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.group.list.GroupListResponse;
+import com.lyncwork.services.hellosign.client.hellosign.client.group.GroupClientFeign;
+
+
+@Component
+public class GroupFallback implements GroupClientFeign {
+
+	@Override
+	public GroupListResponse getMembers(GroupListRequest request){
+		return null;
+	}
+
+	@Override
+	public CreateGroupResponse createGroup(CreateGroupRequest request){
+		return null;
+	}
+
+	@Override
+	public void addGroupMembers(AddGroupMemberRequest addGroupMemberRequest){
+
+	}
+
+}
+
+

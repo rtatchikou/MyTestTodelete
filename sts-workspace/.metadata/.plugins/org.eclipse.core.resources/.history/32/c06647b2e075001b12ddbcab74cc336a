@@ -1,0 +1,89 @@
+@startuml
+skinparam backgroundColor #EEEBDC
+skinparam sequence {
+	ArrowColor DeepSkyBlue
+	LifeLineBorderColor blue
+	LifeLineBackgroundColor #A9DCDF
+
+	ParticipantBorderColor DeepSkyBlue
+	ParticipantBackgroundColor DodgerBlue
+	ParticipantFontSize 17
+	ParticipantFontColor #A9DCDF
+
+	ActorBackgroundColor aqua
+	ActorFontColor DeepSkyBlue
+	ActorFontSize 17
+	ActorFontName Aapex
+}
+
+participant FrontEnd
+participant LWDropboxService
+participant DropboxServer
+
+title List Tenant Files
+autonumber  " <font color=red><b>[0]"
+FrontEnd -> FrontEnd :
+
+note right
+POST /tenant/files/list
+Body:
+MultipartFile file
+
+Header:
+Signed JWT token
+containing userName
+tenantId and ADMIN authority
+end note
+FrontEnd -> LWDropboxService : POST /tenant/files/list
+LWDropboxService -> LWDropboxService: validateJWTToken()
+alt has ADMIN authority, tenantId != null and userName !=null
+LWDropboxService -> LWDropboxService: findCompanyByTenantId()
+opt tenant not found in database
+LWDropboxService -> FrontEnd : 500: Internal Server Error
+end opt
+LWDropboxService -> LWDropboxService: findByDropboxFileByFileId()
+opt File not found in database
+LWDropboxService -> FrontEnd : 404: Not Found
+end opt
+
+LWDropboxService -> LWDropboxService: findLWAdminIdFromLocalCache()
+opt lWAdmin does not exist in local cache
+note right
+POST /team/members/list
+Body:
+dropbox admin userId
+root namespaceId
+file path
+
+Header:
+refreshable auth token
+stored in database
+end note
+LWDropboxService -> DropboxServer : POST /team/members/list
+
+DropboxServer --> LWDropboxService : ListMemberResponse
+LWDropboxService -> LWDropboxService: putLWAdminIdIntoTheLocalCache()
+end opt
+note right
+POST /files/download"
+Body:
+Tenant folder name
+root namespaceId
+dropbox admin userId
+
+Header:
+refreshable auth token
+stored in database
+end note
+LWDropboxService -> DropboxServer : /files/download"
+DropboxServer --> LWDropboxService : ListFolderResponse
+
+LWDropboxService -> LWDropboxService: createFileListResponse()
+
+LWDropboxService -> FrontEnd : FileListResponse
+else
+LWDropboxService -> FrontEnd : 401 Unauthorized
+end alt
+
+
+@enduml

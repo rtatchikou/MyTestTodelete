@@ -1,0 +1,113 @@
+package com.lyncwork.services.dropbox.service.dto;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+public class CompanyDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
+
+    private String tenantId;
+
+    private String companyName;
+
+    private String teamFolderName;
+
+    private String teamFolderNameSpaceId;
+
+    private String perentSharedFolderId;
+
+    private String folderId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getTeamFolderName() {
+        return teamFolderName;
+    }
+
+    public void setTeamFolderName(String teamFolderName) {
+        this.teamFolderName = teamFolderName;
+    }
+
+    public String getTeamFolderNameSpaceId() {
+        return teamFolderNameSpaceId;
+    }
+
+    public void setTeamFolderNameSpaceId(String teamFolderNameSpaceId) {
+        this.teamFolderNameSpaceId = teamFolderNameSpaceId;
+    }
+
+    public String getPerentSharedFolderId() {
+        return perentSharedFolderId;
+    }
+
+    public void setPerentSharedFolderId(String perentSharedFolderId) {
+        this.perentSharedFolderId = perentSharedFolderId;
+    }
+
+    public String getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyDTO{" +
+                "id=" + id +
+                ", tenantId='" + tenantId + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", teamFolderName='" + teamFolderName + '\'' +
+                ", teamFolderNameSpaceId='" + teamFolderNameSpaceId + '\'' +
+                ", perentSharedFolderId='" + perentSharedFolderId + '\'' +
+                ", folderId='" + folderId + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CompanyDTO companyDTO = (CompanyDTO) o;
+        if (companyDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), companyDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+}

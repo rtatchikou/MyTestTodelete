@@ -1,0 +1,15 @@
+package com.lyncwork.services.hellosign.client.hellosign.service;
+
+import java.net.URI;
+
+import com.lyncwork.services.hellosign.client.dropbox.domaine.Auth;
+
+public interface AuthService {
+
+    String getToken();
+
+    Auth getNewToken(String code);
+
+    URI getCodeURI();
+
+}

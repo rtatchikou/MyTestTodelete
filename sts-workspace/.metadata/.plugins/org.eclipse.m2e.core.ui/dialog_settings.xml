@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="/Users/traymond/Documents/0-LYNCWORK/HELLOSIGN/docu"/>
+			<item value="/Users/traymond/Documents/UPWORK/Dropbox-git/dropbox-biz"/>
+			<item value="/Users/traymond/Documents/UPWORK/Dropbox/dropbox-biz-main"/>
+			<item value="/Users/traymond/Documents/0-LYNCWORK/DROPBOX-INT/dev/int-dropbox"/>
+			<item value="/Users/traymond/Documents/0-LYNCWORK/DROPBOX-INT/int-dropbox"/>
+			<item value="/Users/traymond/Documents/0-LYNCWORK/DROPBOX-INT/int-expensify"/>
+			<item value="/Users/traymond/Documents/0-LYNCWORK/EXPENSIFY-GIT-INIT/Upwork/expensify-main"/>
+			<item value="/Users/traymond/Documents/LOCAL_TEST/multipart"/>
+			<item value="/Users/traymond/Documents/development/BAELDUNG/tutorials-master 3/spring-cloud"/>
+			<item value="/Users/traymond/Documents/development/BAELDUNG/tutorials-master 3/spring-cloud/spring-cloud-openfeign"/>
+			<item value="/Users/traymond/Documents/development/BAELDUNG/workspace/spring-cloud-netflix-feign"/>
+			<item value="/Users/traymond/Documents/development/BAELDUNG/workspace/spring-cloud-openfeign"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="org.eclipse.m2e.core.pom.overview">
+	</section>
+	<section name="org.eclipse.m2e.core.pom.dependencies">
+	</section>
+</section>

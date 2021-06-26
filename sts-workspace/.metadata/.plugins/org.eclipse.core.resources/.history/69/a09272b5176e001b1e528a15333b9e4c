@@ -1,0 +1,42 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.response.group.add;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.group.AccessTypeResponse;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.member.Profile;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+@JsonInclude(Include.NON_NULL)
+public class GroupAddResponse {
+	
+	@JsonProperty("profile")
+	private Profile profile;
+	
+	@JsonProperty("access_type")
+	private AccessTypeResponse accessType;
+
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
+
+	public AccessTypeResponse getAccessType() {
+		return accessType;
+	}
+
+	public void setAccessType(AccessTypeResponse accessType) {
+		this.accessType = accessType;
+	}
+
+	@Override
+	public String toString() {
+		return "GroupAddResponse{" +
+				"profile=" + profile +
+				", accessType=" + accessType +
+				'}';
+	}
+}

@@ -1,0 +1,49 @@
+package com.lyncwork.services.dropbox.model.request;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+public class GetFileRequest implements Serializable {
+
+    @NotBlank
+    private String companyName;
+
+    @NotBlank
+    private String tenantId;
+
+    @NotBlank
+    private String fileId;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+
+    @Override
+    public String toString() {
+        return "GetFileRequest{" +
+                "companyName='" + companyName + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", fileId='" + fileId + '\'' +
+                '}';
+    }
+}

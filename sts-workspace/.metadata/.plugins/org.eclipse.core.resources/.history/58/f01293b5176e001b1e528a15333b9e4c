@@ -1,0 +1,18 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.response.member;
+
+public enum StatusConstant {
+	ACTIVE("active"),
+	INVITED("invited"),
+	SUSPENDED("suspended"),
+	REMOVED("removed")
+	;
+	private String desc;
+
+	private StatusConstant(String desc) {
+		this.desc = desc;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+}

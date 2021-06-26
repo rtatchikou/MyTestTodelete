@@ -1,0 +1,30 @@
+package com.lyncwork.services.dropbox.domain;
+
+import com.lyncwork.services.dropbox.domain.enumeration.UserRole;
+import javax.annotation.Generated;
+import javax.persistence.metamodel.SetAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+
+@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
+@StaticMetamodel(User.class)
+public abstract class User_ {
+
+	public static volatile SetAttribute<User, File> filesOwnedByUser;
+	public static volatile SingularAttribute<User, String> emailPrimary;
+	public static volatile SingularAttribute<User, Company> company;
+	public static volatile SingularAttribute<User, Long> id;
+	public static volatile SetAttribute<User, File> fileSheredWithUser;
+	public static volatile SingularAttribute<User, UserRole> userRole;
+	public static volatile SingularAttribute<User, String> username;
+
+	public static final String FILES_OWNED_BY_USER = "filesOwnedByUser";
+	public static final String EMAIL_PRIMARY = "emailPrimary";
+	public static final String COMPANY = "company";
+	public static final String ID = "id";
+	public static final String FILE_SHERED_WITH_USER = "fileSheredWithUser";
+	public static final String USER_ROLE = "userRole";
+	public static final String USERNAME = "username";
+
+}
+

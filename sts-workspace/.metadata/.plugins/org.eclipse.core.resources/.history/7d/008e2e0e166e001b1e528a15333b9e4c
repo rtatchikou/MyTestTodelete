@@ -1,0 +1,51 @@
+package com.lyncwork.services.dropbox.model.request;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+public class UploadRequest implements Serializable {
+
+    @NotBlank
+    private String companyName;
+
+    @NotBlank
+    private String tenantId;
+
+    private MultipartFile file;
+
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    @Override
+    public String toString() {
+        return "UploadRequest{" +
+                "companyName='" + companyName + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", file=" + file +
+                '}';
+    }
+}

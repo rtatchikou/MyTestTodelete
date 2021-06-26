@@ -1,0 +1,56 @@
+package com.lyncwork.services.dropbox.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lyncwork.services.hellosign.domain.File;
+import com.lyncwork.services.hellosign.repository.FileRepository;
+import com.lyncwork.services.hellosign.service.dto.FileDTO;
+import com.lyncwork.services.hellosign.service.mapper.FileMapper;
+
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing {@link FileService}.
+ */
+@Service
+@Transactional
+public class FileService {
+
+    private final Logger log = LoggerFactory.getLogger(FileService.class);
+
+    @Autowired
+    private FileRepository fileRepository;
+
+    @Autowired
+    private FileMapper fileMapper;
+
+    @Transactional(readOnly = true)
+    public Optional<FileDTO> findByFilePath(String filePath) {
+        log.debug("Request to get file : {}", filePath);
+        File file= fileRepository.findByFilePath(filePath);
+        FileDTO fileDTO = fileMapper.toDto(file);
+        return Optional.ofNullable(fileDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public FileDTO save(FileDTO fileDTO) {
+        log.debug("Request to save file : {}", fileDTO);
+        File file = fileMapper.toEntity(fileDTO);
+        file = fileRepository.save(file);
+        FileDTO result = fileMapper.toDto(file);
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<FileDTO> findByDropboxFileId(String dropboxFileId) {
+        log.debug("Request to get file : {}", dropboxFileId);
+        File file= fileRepository.findByDropboxFileId(dropboxFileId);
+        FileDTO fileDTO = fileMapper.toDto(file);
+        return Optional.ofNullable(fileDTO);
+    }
+
+}

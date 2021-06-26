@@ -1,0 +1,47 @@
+package com.efunzo.be.training.contoller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.efunzo.be.training.service.UserService;
+import com.test.userroletest.entity.Role;
+import com.test.userroletest.entity.User;
+import com.test.userroletest.model.ErrorResponse;
+import com.test.userroletest.model.UserResponse;
+import com.test.userroletest.model.UserRoleTestResult;
+import com.test.userroletest.service.UserRoleTestService;
+import com.test.userroletest.utils.Utils;
+
+@RestController
+@RequestMapping("/api")
+public class UserController {
+	
+	@Autowired
+	private UserService userService;
+	
+	
+	
+	@GetMapping("/user/id")
+	public ResponseEntity<User> findById(
+	   @PathVariable(value = "id") Integer id) {
+		
+		
+		
+	   return ResponseEntity.status( HttpStatus.OK).body( );
+	}
+	
+	
+
+}

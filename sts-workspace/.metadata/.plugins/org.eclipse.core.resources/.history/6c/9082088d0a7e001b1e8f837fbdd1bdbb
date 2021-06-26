@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompanyService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.service</a> &gt; <span class="el_source">CompanyService.java</span></div><h1>CompanyService.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.service;
+
+import com.lyncwork.services.dropbox.client.dropbox.client.member.DropboxMemberClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.client.teamfolder.ContentClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.client.teamfolder.FilesClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.client.teamfolder.TeamFolderClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.member.list.ListMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.ApiPathRoot;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.create.CreateTeamFolderRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.create.UploadHeaderArgument;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.member.list.ListMember;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.teamfolder.create.CreateTeamFolderResponse;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.teamfolder.list.GetNamespcesResponse;
+import com.lyncwork.services.dropbox.client.dropbox.utils.Constants;
+import com.lyncwork.services.dropbox.client.dropbox.utils.JsonUtils;
+import com.lyncwork.services.dropbox.domain.Company;
+import com.lyncwork.services.dropbox.model.request.ListFilesRequest;
+import com.lyncwork.services.dropbox.model.request.ProvisionTenantRequest;
+import com.lyncwork.services.dropbox.model.request.UploadRequest;
+import com.lyncwork.services.dropbox.model.response.ListFilesResponse;
+import com.lyncwork.services.dropbox.model.response.ProvisionTenantResponse;
+import com.lyncwork.services.dropbox.model.response.UploadResponse;
+import com.lyncwork.services.dropbox.repository.CompanyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing {@link CompanyService}.
+ */
+@Service
+@Transactional
+<span class="nc" id="L41">public class CompanyService {</span>
+
+    @Autowired
+    private TeamFolderClientFeign teamFolderClientFeign;
+
+    @Autowired
+    private DropboxMemberClientFeign dropboxMemberClientFeign;
+
+    @Autowired
+    private FilesClientFeign filesClientFeign;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
+    private ContentClientFeign contentClientFeign;
+
+<span class="nc" id="L58">    private final Logger log = LoggerFactory.getLogger(CompanyService.class);</span>
+
+    public ProvisionTenantResponse provisionTenant(String tenantId, ProvisionTenantRequest provisionTenant) {
+
+<span class="nc" id="L62">        Company company =companyRepository.findByTenantId(tenantId);</span>
+<span class="nc" id="L63">        ProvisionTenantResponse provisionTenantResponse = new ProvisionTenantResponse();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if(company != null){</span>
+<span class="nc" id="L65">            provisionTenantResponse.setParentFolderId(company.getPerentSharedFolderId());</span>
+<span class="nc" id="L66">            provisionTenantResponse.setFolderName(company.getTeamFolderName());</span>
+        }else {
+<span class="nc" id="L68">            GetNamespcesResponse namespacesResponse = teamFolderClientFeign.getNamespaces(&quot;{}&quot;);</span>
+<span class="nc" id="L69">            Optional&lt;String&gt; namespaceId = namespacesResponse.getNamespaces().stream()</span>
+<span class="nc" id="L70">                    .filter(n -&gt; Constants.ROOT_FOLDER_NAME.equalsIgnoreCase(n.getName()))</span>
+<span class="nc" id="L71">                    .map(n -&gt; n.getNamespaceId())</span>
+<span class="nc" id="L72">                    .findFirst();</span>
+
+<span class="nc" id="L74">            CreateTeamFolderResponse createTeamFolderResponse = null;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (namespaceId.isPresent()) {</span>
+<span class="nc" id="L76">                String apiPathRoot = JsonUtils.writeValueAsString(new ApiPathRoot(Constants.NAME_SPACE_ID, namespaceId.get()));</span>
+<span class="nc" id="L77">                ListMemberRequest listMemberRequest = new ListMemberRequest();</span>
+<span class="nc" id="L78">                listMemberRequest.setLimit(100);</span>
+<span class="nc" id="L79">                listMemberRequest.setIncludeRemoved(false);</span>
+<span class="nc" id="L80">                ListMember listMembers = dropboxMemberClientFeign.getMembers(listMemberRequest);</span>
+<span class="nc" id="L81">                log.info(&quot;listMembers: {}&quot;, listMembers);</span>
+<span class="nc" id="L82">                Optional&lt;String&gt; adminId = listMembers.getMembers().stream()</span>
+<span class="nc" id="L83">                        .filter(m -&gt; Constants.TEAM_ADMIN.equalsIgnoreCase(m.getRole().getTag()))</span>
+<span class="nc" id="L84">                        .filter(m -&gt; Constants.TEAM_ACTIVE_STATUS.equalsIgnoreCase(m.getProfile().getStatus().getTag()))</span>
+<span class="nc" id="L85">                        .map(m -&gt; m.getProfile().getTeamMemberId())</span>
+<span class="nc" id="L86">                        .findFirst();</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (adminId.isPresent()) {</span>
+
+<span class="nc" id="L90">                    log.info(&quot;Admin id: {}&quot;, adminId.get());</span>
+<span class="nc" id="L91">                    Map&lt;String, String&gt; headers = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L92">                    headers.put(Constants.DROPBOX_API_SELECT_USER, adminId.get());</span>
+<span class="nc" id="L93">                    headers.put(Constants.DROPBOX_API_PATH_ROOT, apiPathRoot);</span>
+<span class="nc" id="L94">                    CreateTeamFolderRequest createTeamFolderRequest = new CreateTeamFolderRequest();</span>
+<span class="nc" id="L95">                    createTeamFolderRequest.setPath(&quot;/&quot; + provisionTenant.getCompanyName() + &quot;_&quot; + tenantId);</span>
+<span class="nc" id="L96">                    createTeamFolderRequest.setAutoRename(false);</span>
+
+<span class="nc" id="L98">                    log.info(&quot;createTeamFolderRequest: {}&quot;, createTeamFolderRequest);</span>
+
+<span class="nc" id="L100">                    log.info(&quot;headers: {}&quot;, headers);</span>
+
+<span class="nc" id="L102">                    createTeamFolderResponse = filesClientFeign.createTeamFolder(createTeamFolderRequest, headers);</span>
+
+<span class="nc" id="L104">                    log.info(&quot;createTeamFolderResponse: {}&quot;, createTeamFolderResponse);</span>
+
+<span class="nc" id="L106">                    company = new Company();</span>
+<span class="nc" id="L107">                    company.setTenantId(tenantId);</span>
+<span class="nc" id="L108">                    company.setTeamFolderName(createTeamFolderResponse.getMetadata().getPathDisplay());</span>
+<span class="nc" id="L109">                    company.setCompanyName(provisionTenant.getCompanyName());</span>
+<span class="nc" id="L110">                    company.setFolderId(createTeamFolderResponse.getTeamFolderId());</span>
+<span class="nc" id="L111">                    company.setTeamFolderNameSpaceId(createTeamFolderResponse.getTeamFolderId());</span>
+<span class="nc" id="L112">                    company.setPerentSharedFolderId(createTeamFolderResponse.getMetadata().getParentFolderId());</span>
+<span class="nc" id="L113">                    companyRepository.save(company);</span>
+
+                }
+            }
+
+<span class="nc" id="L118">            provisionTenantResponse.setFolderName(createTeamFolderResponse.getMetadata().getPathDisplay());</span>
+<span class="nc" id="L119">            provisionTenantResponse.setParentFolderId(createTeamFolderResponse.getMetadata().getParentFolderId());</span>
+        }
+<span class="nc" id="L121">        return provisionTenantResponse;</span>
+    }
+
+    public UploadResponse upload(MultipartFile file, UploadRequest uploadRequest) {
+
+<span class="nc" id="L126">        String companyName = uploadRequest.getCompanyName();</span>
+<span class="nc" id="L127">        String tenantId = uploadRequest.getTenantId();</span>
+<span class="nc" id="L128">        Company company = companyRepository.findByTenantIdAndCompanyName(tenantId, companyName);</span>
+<span class="nc" id="L129">        UploadHeaderArgument uploadHeaderArgument = new  UploadHeaderArgument();</span>
+<span class="nc" id="L130">        uploadHeaderArgument.setPath(company.getCompanyName()+&quot;/&quot;+file.getName());</span>
+<span class="nc" id="L131">        uploadHeaderArgument.setMode(&quot;add&quot;);</span>
+<span class="nc" id="L132">        uploadHeaderArgument.setAutorename(false);</span>
+<span class="nc" id="L133">        uploadHeaderArgument.setMute(false);</span>
+<span class="nc" id="L134">        uploadHeaderArgument.setStrictConflict(true);</span>
+<span class="nc" id="L135">        String argument  = JsonUtils.writeValueAsString(uploadHeaderArgument);</span>
+<span class="nc" id="L136">        Map&lt;String, String&gt; headers = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L137">        headers.put(Constants.DROPBOX_API_ARG, argument);</span>
+<span class="nc" id="L138">        headers.put(&quot;Content-Type&quot;, &quot;application/octet-stream&quot;);</span>
+
+<span class="nc" id="L140">        byte[] anotherData = null;</span>
+        try {
+<span class="nc" id="L142">            anotherData = file.getBytes();</span>
+<span class="nc" id="L143">        } catch (IOException e1) {</span>
+            // TODO Auto-generated catch block
+<span class="nc" id="L145">            e1.printStackTrace();</span>
+<span class="nc" id="L146">        }</span>
+
+<span class="nc" id="L148">        String response = contentClientFeign.createTeamFolder(anotherData, headers);</span>
+<span class="nc" id="L149">        log.info(&quot;response: {}&quot;, response);</span>
+<span class="nc" id="L150">        UploadResponse uploadResponse = new UploadResponse();</span>
+<span class="nc" id="L151">        uploadResponse.setFolderName(&quot;qw&quot;);</span>
+<span class="nc" id="L152">        uploadResponse.setParentFolderId(&quot;der&quot;);</span>
+
+<span class="nc" id="L154">        return  uploadResponse;</span>
+    }
+
+    public ListFilesResponse listFiles(ListFilesRequest listFilesRequest) {
+
+<span class="nc" id="L159">        return null;</span>
+    }
+
+    public MultipartFile getFile(String tenantId, String fileId) {
+
+<span class="nc" id="L164">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

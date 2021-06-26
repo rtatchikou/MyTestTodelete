@@ -1,0 +1,65 @@
+package com.efunzo.be.training.contoller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.efunzo.be.training.domaine.User;
+import com.efunzo.be.training.service.UserService;
+
+
+@RestController
+@RequestMapping("/api")
+public class AddressController {
+	
+	@Autowired
+	private UserService userService;
+	
+	
+	@PostMapping("/user")
+	public ResponseEntity<User> saveUser(@RequestBody User user) {
+		
+		User userResponse = userService.addUser(user);
+
+		return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+	}
+	
+	@GetMapping("/user/id")
+	public ResponseEntity<User> findById(@PathVariable(value = "id") Integer id) {
+		
+		User userResponse = userService.findById(id);
+
+		return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+	}
+	
+	@PutMapping("/user")
+	public ResponseEntity<User> updateUser(@RequestBody User user) {
+
+		User userResponse = userService.updateUser(user);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+	}
+	
+	@DeleteMapping("/user/id")
+	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") Integer id) {
+		
+		User userResponse = userService.deleteUser(id);
+
+		return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+	}
+	
+	
+	
+
+}

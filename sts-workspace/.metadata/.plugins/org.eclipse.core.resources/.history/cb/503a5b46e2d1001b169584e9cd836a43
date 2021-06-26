@@ -1,0 +1,13 @@
+package com.efunzo.be.tarining;
+
+public class Main {
+
+	
+	public static void main(String[] args) {
+		
+		int[] myInt = new int[] {1, 4, 6};
+		
+		int[] myInt2 = new int[3]();
+		
+	}
+}

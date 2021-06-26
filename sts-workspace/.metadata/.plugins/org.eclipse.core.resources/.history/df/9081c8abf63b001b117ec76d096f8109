@@ -1,0 +1,100 @@
+package com.lyncwork.services.gusto.client.gusto.controller;
+
+
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.lyncwork.services.gusto.client.gusto.client.GustoClient;
+import com.lyncwork.services.gusto.client.gusto.interceptor.GustoClientInterceptor;
+import com.lyncwork.services.gusto.client.gusto.payload.Company;
+import com.lyncwork.services.gusto.client.store.client.SubscriptionAppClient;
+import com.lyncwork.services.gusto.processors.Constants;
+import com.lyncwork.services.gusto.client.gusto.service.Processor.GustoProcessor;
+import com.lyncwork.services.gusto.repository.hibernate.TenantContext;
+import com.lyncwork.services.gusto.client.gusto.service.GustoService;
+import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+
+@RestController
+public class GustoResource {
+
+    private static final Logger logger = LoggerFactory.getLogger(GustoResource.class);
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
+    @Autowired
+    GustoService gustoService;
+    @Autowired
+    SubscriptionAppClient subscriptionAppClient;
+    @Autowired
+    GustoClient gustoClient;
+    @Autowired
+    GustoProcessor gustoProcessor;
+    @Value("${gusto.oauth.autorize.url}")
+    String gustoAutorizeUrl;
+    @Value("${lyncworks.domain}")
+    private String domain;
+    @Autowired
+    GustoClientInterceptor interceptor;
+    @RequestMapping("/login/gusto/{tenantId}")
+    public ResponseEntity<Void> gustoConnectionStatus(@PathVariable String tenantId) throws Exception {
+         GustoService.GustoParameters gustoParameters = gustoService.getGustoParameters();
+        Map<String, Object> frontEndUrlMap =new HashMap<>();
+        if (!StringUtils.isEmpty(TenantContext.getFrontendDomain())){
+            frontEndUrlMap.put(Constants.GUSTO_FRONTEND_REDIRECT_URL,TenantContext.getFrontendDomain());
+        } else {
+            String scheme = TenantContext.getRefererScheme().isEmpty() ? "http" : TenantContext.getRefererScheme().get();
+
+            frontEndUrlMap.put("frontend-redirect-url",(String.format("%s://%s.%s", scheme, tenantId, domain)));
+        }
+        gustoService.saveGustoProperties(frontEndUrlMap);
+        URI uri = new URIBuilder(gustoAutorizeUrl).addParameter(Constants.GUSTO_CLIENT_ID, gustoParameters.getClientId())
+            .addParameter(Constants.GUSTO_REDIRECT_URI, gustoParameters.getRedirectUri())
+            .addParameter(Constants.GUSTO_RESPONSE_TYPE, "code").build();
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+            .header(HttpHeaders.LOCATION, uri.toString())
+            .build();
+    }
+
+    @GetMapping("redirect/gusto")
+    public ResponseEntity<String> oauth2Callback(@RequestParam(value = "code") String code) throws IOException {
+        GustoService.GustoParameters gustoParameters = gustoService.getGustoParameters();
+        logger.info(gustoParameters.toString());
+        Map<String, Object> responseCode = gustoClient.getAccessToken(
+            gustoParameters.getClientId(),
+            gustoParameters.getRedirectUri(),
+            gustoParameters.getClientSecret(),
+            Constants.GUSTO_AUTHORIZATION_CODE, code);
+        String message;
+        if (responseCode != null) {
+            try {
+                String accessToken = (String) responseCode.get(Constants.GUSTO_ACCESS_TOKEN);
+                List<Company> companies = gustoClient.getCompanyID(Constants.BEARER + " " + accessToken);
+                if (companies != null)
+                    responseCode.put(Constants.GUSTO_COMPANY_ID, companies.get(0).getId());
+                message = gustoService.saveGustoProperties(responseCode);
+            }catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                logger.error("Exception while handling OAuth2 callback ({}). Redirecting to google connection status page.", e.getMessage());
+                message = "Exception while handling OAuth2 callback (" + e.getMessage() + "). Redirecting to google connection status page.";
+            }
+
+            logger.debug("Response message: {}", message);
+            return  ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, gustoParameters.getFrontendRedirectUrl())
+                .build();
+        }
+        return null;
+    }
+
+}

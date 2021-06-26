@@ -1,0 +1,117 @@
+package com.lyncwork.services.store.service.mapper;
+
+import com.lyncwork.services.store.domain.ApplicationCapability;
+import com.lyncwork.services.store.domain.Role;
+import com.lyncwork.services.store.service.dto.ApplicationCapabilityDTO;
+import com.lyncwork.services.store.service.dto.RoleDTO;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2020-11-09T21:52:48-0500",
+    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
+)
+@Component
+public class RoleMapperImpl implements RoleMapper {
+
+    @Autowired
+    private ApplicationCapabilityMapper applicationCapabilityMapper;
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+
+    @Override
+    public List<Role> toEntity(List<RoleDTO> dtoList) {
+        if ( dtoList == null ) {
+            return null;
+        }
+
+        List<Role> list = new ArrayList<Role>( dtoList.size() );
+        for ( RoleDTO roleDTO : dtoList ) {
+            list.add( toEntity( roleDTO ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<RoleDTO> toDto(List<Role> entityList) {
+        if ( entityList == null ) {
+            return null;
+        }
+
+        List<RoleDTO> list = new ArrayList<RoleDTO>( entityList.size() );
+        for ( Role role : entityList ) {
+            list.add( toDto( role ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public Role toEntity(RoleDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        Role role = new Role();
+
+        role.applicationCapabilities( applicationCapabilityDTOSetToApplicationCapabilitySet( dto.getApplicationCapabilities() ) );
+        role.setPermissions( rolePermissionMapper.toEntity( dto.getPermissions() ) );
+        role.setId( dto.getId() );
+        role.setRoleName( dto.getRoleName() );
+        role.setRoleType( dto.getRoleType() );
+
+        return role;
+    }
+
+    @Override
+    public RoleDTO toDto(Role entity) {
+        avoidBackReference( entity );
+
+        if ( entity == null ) {
+            return null;
+        }
+
+        RoleDTO roleDTO = new RoleDTO();
+
+        roleDTO.setApplicationCapabilities( applicationCapabilitySetToApplicationCapabilityDTOSet( entity.getApplicationCapabilities() ) );
+        roleDTO.setPermissions( rolePermissionMapper.toDto( entity.getPermissions() ) );
+        roleDTO.setId( entity.getId() );
+        roleDTO.setRoleName( entity.getRoleName() );
+        roleDTO.setRoleType( entity.getRoleType() );
+
+        return roleDTO;
+    }
+
+    protected Set<ApplicationCapability> applicationCapabilityDTOSetToApplicationCapabilitySet(Set<ApplicationCapabilityDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCapability> set1 = new HashSet<ApplicationCapability>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCapabilityDTO applicationCapabilityDTO : set ) {
+            set1.add( applicationCapabilityMapper.toEntity( applicationCapabilityDTO ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationCapabilityDTO> applicationCapabilitySetToApplicationCapabilityDTOSet(Set<ApplicationCapability> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCapabilityDTO> set1 = new HashSet<ApplicationCapabilityDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCapability applicationCapability : set ) {
+            set1.add( applicationCapabilityMapper.toDto( applicationCapability ) );
+        }
+
+        return set1;
+    }
+}

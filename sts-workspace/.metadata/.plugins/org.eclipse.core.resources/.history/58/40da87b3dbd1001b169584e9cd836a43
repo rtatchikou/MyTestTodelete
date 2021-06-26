@@ -1,0 +1,6 @@
+package com.efunzo.be.training;
+
+public interface CanRun {
+	
+
+}

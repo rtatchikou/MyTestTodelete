@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.24">
+<file name="/Users/traymond/Documents/0-LYNCWORK/HELLOSIGN-INT/dev/int-hellosign/pom.xml">
+</file>
+<file name="/Users/traymond/Documents/0-LYNCWORK/HELLOSIGN-INT/dev/int-hellosign/README.md">
+</file>
+<file name="/Users/traymond/Documents/0-LYNCWORK/HELLOSIGN-INT/dev/int-hellosign/src/main/resources/i18n/messages.properties">
+</file>
+<file name="/Users/traymond/Documents/0-LYNCWORK/HELLOSIGN-INT/dev/int-hellosign/src/main/resources/.h2.server.properties">
+</file>
+</checkstyle>

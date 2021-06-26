@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.client.dropbox.utils</a> &gt; <span class="el_source">FileUtils.java</span></div><h1>FileUtils.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.client.dropbox.utils;
+
+import com.opencsv.CSVWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+<span class="nc" id="L17">public class FileUtils {</span>
+<span class="nc" id="L18">    private static final Logger logger= LoggerFactory.getLogger(FileUtils.class);</span>
+
+    public static Path creatCsvTempFile(){
+<span class="nc" id="L21">        Path path = null;</span>
+        try {
+<span class="nc" id="L23">            path = Files.createTempFile(UUID.randomUUID().toString()+&quot;employeeData&quot;, &quot;.csv&quot;);</span>
+
+<span class="nc" id="L25">        } catch (IOException e)</span>
+        {
+<span class="nc" id="L27">            logger.error(&quot;Error while creating csv file: &quot; + e.toString());</span>
+<span class="nc" id="L28">            e.printStackTrace();</span>
+<span class="nc" id="L29">        }</span>
+
+<span class="nc" id="L31">        return path;</span>
+    }
+
+    public static File createEmployeeDataCsv(String filePath, String employeeEmail, String managerEmail, Boolean isAdmin )
+    {
+<span class="nc" id="L36">        File file = new File(filePath);</span>
+        try {
+
+<span class="nc" id="L39">            FileWriter outputfile = new FileWriter(file);</span>
+<span class="nc" id="L40">            CSVWriter writer = new CSVWriter(outputfile);</span>
+
+<span class="nc" id="L42">            String[] header = { &quot;EmployeeEmail&quot;,&quot;ManagerEmail&quot;,&quot;Admin&quot; };</span>
+<span class="nc" id="L43">            writer.writeNext(header);</span>
+
+<span class="nc" id="L45">            String[] data1 = { employeeEmail, managerEmail, isAdmin.toString() };</span>
+<span class="nc" id="L46">            writer.writeNext(data1);</span>
+
+<span class="nc" id="L48">            writer.close();</span>
+        }
+<span class="nc" id="L50">        catch (IOException e) {</span>
+<span class="nc" id="L51">            logger.error(&quot;Error while creating csv file: &quot; + e.toString());</span>
+<span class="nc" id="L52">            e.printStackTrace();</span>
+<span class="nc" id="L53">        }</span>
+
+<span class="nc" id="L55">        return file;</span>
+    }
+
+    public static void printContent(File file) {
+<span class="nc" id="L59">        try(BufferedReader br = new BufferedReader(new FileReader(file))) {</span>
+            String line;
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            while((line = br.readLine()) != null) {</span>
+<span class="nc" id="L62">                logger.info(&quot;{}&quot;, line);</span>
+            }
+<span class="nc" id="L64">        } catch (Exception e) {</span>
+<span class="nc" id="L65">            e.printStackTrace();</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">    }</span>
+
+    public static void print(List&lt;String[]&gt; datas ) {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if(datas == null) {</span>
+<span class="nc" id="L71">            logger.info(&quot;no data to be printed&quot;);</span>
+        } else {
+<span class="nc" id="L73">            datas.stream().forEach(data -&gt; {</span>
+<span class="nc" id="L74">                logger.info(&quot;{}&quot;, Arrays.toString(data));</span>
+<span class="nc" id="L75">            });</span>
+        }
+
+<span class="nc" id="L78">    }</span>
+
+    public static File createCSVTempFile(List&lt;String[]&gt; lines, String fileName) {
+<span class="nc" id="L81">        File file = createTempFile(fileName);</span>
+<span class="nc" id="L82">        try(PrintWriter writer = new PrintWriter(file)) {</span>
+<span class="nc" id="L83">            lines.stream().map(line -&gt; convertToCSV(line)).forEach(writer::println);;</span>
+<span class="nc" id="L84">            return file;</span>
+<span class="nc" id="L85">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L86">            logger.error(e.getMessage());</span>
+<span class="nc" id="L87">            return null;</span>
+        }
+    }
+
+    private static String convertToCSV(String[] data) {
+<span class="nc" id="L92">        return Stream.of(data)</span>
+<span class="nc" id="L93">                .map(dataItem -&gt; escapeSpecialCharacters(dataItem))</span>
+<span class="nc" id="L94">                .collect(Collectors.joining(&quot;,&quot;));</span>
+    }
+
+    private static String escapeSpecialCharacters(String data) {
+<span class="nc" id="L98">        String escapedData = data.replaceAll(&quot;\\R&quot;, &quot; &quot;);</span>
+<span class="nc bnc" id="L99" title="All 6 branches missed.">        if (data.contains(&quot;,&quot;) || data.contains(&quot;\&quot;&quot;) || data.contains(&quot;'&quot;)) {</span>
+<span class="nc" id="L100">            data = data.replace(&quot;\&quot;&quot;, &quot;\&quot;\&quot;&quot;);</span>
+<span class="nc" id="L101">            escapedData = &quot;\&quot;&quot; + data + &quot;\&quot;&quot;;</span>
+        }
+<span class="nc" id="L103">        return escapedData;</span>
+    }
+
+    private static File createTempFile(String fileName)  {
+        try {
+<span class="nc" id="L108">            return File.createTempFile(fileName, &quot;.csv&quot;);</span>
+<span class="nc" id="L109">        } catch (IOException e) {</span>
+<span class="nc" id="L110">            logger.error(e.getMessage());</span>
+<span class="nc" id="L111">            return null;</span>
+        }
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

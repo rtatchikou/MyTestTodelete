@@ -1,0 +1,115 @@
+package com.lyncwork.services.dropbox.domain;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+/**
+ * A Company.
+ */
+@Entity
+@Table(name = "company")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class Company implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Column(name = "tenant_id")
+    private String tenantId;
+
+    @NotBlank
+    @Column(name = "company_name")
+    private String companyName;
+
+    @NotBlank
+    @Column(name = "team_folder_name")
+    private String teamFolderName;
+
+    @Column(name = "team_folder_name_space_id")
+    private String teamFolderNameSpaceId;
+
+    @Column(name = "parent_shared_folder_id")
+    private String perentSharedFolderId;
+
+    @Column(name = "folder_id")
+    private String folderId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getTeamFolderName() {
+        return teamFolderName;
+    }
+
+    public void setTeamFolderName(String teamFolderName) {
+        this.teamFolderName = teamFolderName;
+    }
+
+    public String getTeamFolderNameSpaceId() {
+        return teamFolderNameSpaceId;
+    }
+
+    public void setTeamFolderNameSpaceId(String teamFolderNameSpaceId) {
+        this.teamFolderNameSpaceId = teamFolderNameSpaceId;
+    }
+
+    public String getPerentSharedFolderId() {
+        return perentSharedFolderId;
+    }
+
+    public void setPerentSharedFolderId(String perentSharedFolderId) {
+        this.perentSharedFolderId = perentSharedFolderId;
+    }
+
+    public String getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", tenantId='" + tenantId + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", teamFolderName='" + teamFolderName + '\'' +
+                ", teamFolderNameSpaceId='" + teamFolderNameSpaceId + '\'' +
+                ", perentSharedFolderId='" + perentSharedFolderId + '\'' +
+                ", folderId='" + folderId + '\'' +
+                '}';
+    }
+
+
+}

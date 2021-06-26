@@ -1,0 +1,66 @@
+package com.lyncwork.services.dropbox.client.dropbox.config;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Arrays;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CustomInputStream {
+
+	private byte[] data;
+	private String fileName;
+	private String extension;
+	private Long size;
+	private String fileId;
+
+	public byte[] getData() {
+		return data;
+	}
+
+	public void setData(byte[] data) {
+		this.data = data;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public Long getSize() {
+		return size;
+	}
+
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+
+	@Override
+	public String toString() {
+		return "CustomInputStream{" +
+				"data=" + Arrays.toString(data) +
+				", fileName='" + fileName + '\'' +
+				", extension='" + extension + '\'' +
+				", size=" + size +
+				", fileId='" + fileId + '\'' +
+				'}';
+	}
+}

@@ -1,0 +1,75 @@
+package com.lyncwork.services.hellosign.service.mapper;
+
+import com.lyncwork.services.hellosign.domain.SignatureRequestInfo;
+import com.lyncwork.services.hellosign.service.dto.SignatureRequestInfoDTO;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2021-03-04T19:00:45-0500",
+    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
+)
+@Component
+public class SignatureRequestInfoMapperImpl implements SignatureRequestInfoMapper {
+
+    @Override
+    public List<SignatureRequestInfo> toEntity(List<SignatureRequestInfoDTO> dtoList) {
+        if ( dtoList == null ) {
+            return null;
+        }
+
+        List<SignatureRequestInfo> list = new ArrayList<SignatureRequestInfo>( dtoList.size() );
+        for ( SignatureRequestInfoDTO signatureRequestInfoDTO : dtoList ) {
+            list.add( toEntity( signatureRequestInfoDTO ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<SignatureRequestInfoDTO> toDto(List<SignatureRequestInfo> entityList) {
+        if ( entityList == null ) {
+            return null;
+        }
+
+        List<SignatureRequestInfoDTO> list = new ArrayList<SignatureRequestInfoDTO>( entityList.size() );
+        for ( SignatureRequestInfo signatureRequestInfo : entityList ) {
+            list.add( toDto( signatureRequestInfo ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public SignatureRequestInfo toEntity(SignatureRequestInfoDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        SignatureRequestInfo signatureRequestInfo = new SignatureRequestInfo();
+
+        signatureRequestInfo.setId( dto.getId() );
+        signatureRequestInfo.setTenantId( dto.getTenantId() );
+        signatureRequestInfo.setSignatureRequestId( dto.getSignatureRequestId() );
+
+        return signatureRequestInfo;
+    }
+
+    @Override
+    public SignatureRequestInfoDTO toDto(SignatureRequestInfo entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        SignatureRequestInfoDTO signatureRequestInfoDTO = new SignatureRequestInfoDTO();
+
+        signatureRequestInfoDTO.setId( entity.getId() );
+        signatureRequestInfoDTO.setTenantId( entity.getTenantId() );
+        signatureRequestInfoDTO.setSignatureRequestId( entity.getSignatureRequestId() );
+
+        return signatureRequestInfoDTO;
+    }
+}

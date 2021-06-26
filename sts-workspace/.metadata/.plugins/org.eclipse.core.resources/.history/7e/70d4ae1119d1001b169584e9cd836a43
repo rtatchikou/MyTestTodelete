@@ -1,0 +1,19 @@
+package com.efunzo.be.trainig;
+
+public class Forgetable extends Movie {
+
+	public Forgetable() {
+		super("Forgetable");
+		
+	}
+	
+    private String getDescription() {
+		
+		return "The Forgetable is good movi ... ";
+	}
+	
+	private int getDuration() {
+		
+		return 3454636;
+	}
+}

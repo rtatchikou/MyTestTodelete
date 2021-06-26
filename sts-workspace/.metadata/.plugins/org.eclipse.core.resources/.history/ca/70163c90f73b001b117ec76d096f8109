@@ -1,0 +1,46 @@
+package com.lyncwork.services.gusto.client.gusto.payload;
+
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class LyncWorkUser {
+
+    private String firstName;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    private String lastName;
+
+    public String getEmailPrimary() {
+        return emailPrimary;
+    }
+
+    public void setEmailPrimary(String emailPrimary) {
+        this.emailPrimary = emailPrimary;
+    }
+
+    private String emailPrimary;
+
+    public LyncWorkUser()
+    {
+
+    }
+
+
+}

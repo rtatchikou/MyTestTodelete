@@ -1,0 +1,63 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.response.group;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class GroupInfoResponse {
+	
+	@JsonProperty("group_name")
+	private String groupName;
+	
+	@JsonProperty("group_id")
+	private String groupId;
+	
+	@JsonProperty("group_management_type")
+	private GroupManagementTypeResponse groupManagementType;
+	
+	@JsonProperty("member_count")
+	private String memberCount;
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	public GroupManagementTypeResponse getGroupManagementType() {
+		return groupManagementType;
+	}
+
+	public void setGroupManagementType(GroupManagementTypeResponse groupManagementType) {
+		this.groupManagementType = groupManagementType;
+	}
+
+	public String getMemberCount() {
+		return memberCount;
+	}
+
+	public void setMemberCount(String memberCount) {
+		this.memberCount = memberCount;
+	}
+
+	@Override
+	public String toString() {
+		return "GroupInfoResponse{" +
+				"groupName='" + groupName + '\'' +
+				", groupId='" + groupId + '\'' +
+				", groupManagementType=" + groupManagementType +
+				", memberCount='" + memberCount + '\'' +
+				'}';
+	}
+}

@@ -1,0 +1,88 @@
+package com.lyncwork.services.dropbox.service.mapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lyncwork.services.hellosign.domain.File;
+import com.lyncwork.services.hellosign.service.dto.FileDTO;
+import com.lyncwork.services.hellosign.service.mapper.FileMapper;
+import com.lyncwork.services.hellosign.service.mapper.UserMapper;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2021-02-13T11:07:51-0500",
+    comments = "version: 1.3.1.Final, compiler: Eclipse JDT (IDE) 1.3.1100.v20200828-0941, environment: Java 15 (Oracle Corporation)"
+)
+@Component
+public class FileMapperImpl implements FileMapper {
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public List<File> toEntity(List<FileDTO> dtoList) {
+        if ( dtoList == null ) {
+            return null;
+        }
+
+        List<File> list = new ArrayList<File>( dtoList.size() );
+        for ( FileDTO fileDTO : dtoList ) {
+            list.add( toEntity( fileDTO ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<FileDTO> toDto(List<File> entityList) {
+        if ( entityList == null ) {
+            return null;
+        }
+
+        List<FileDTO> list = new ArrayList<FileDTO>( entityList.size() );
+        for ( File file : entityList ) {
+            list.add( toDto( file ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public FileDTO toDto(File entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        FileDTO fileDTO = new FileDTO();
+
+        fileDTO.setDropboxFileId( entity.getDropboxFileId() );
+        fileDTO.setFileName( entity.getFileName() );
+        fileDTO.setFilePath( entity.getFilePath() );
+        fileDTO.setExternalGroupId( entity.getExternalGroupId() );
+        fileDTO.setFileOwner( userMapper.toDto( entity.getFileOwner() ) );
+        fileDTO.setId( entity.getId() );
+
+        return fileDTO;
+    }
+
+    @Override
+    public File toEntity(FileDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        File file = new File();
+
+        file.setDropboxFileId( dto.getDropboxFileId() );
+        file.setFileName( dto.getFileName() );
+        file.setFilePath( dto.getFilePath() );
+        file.setExternalGroupId( dto.getExternalGroupId() );
+        file.setFileOwner( userMapper.toEntity( dto.getFileOwner() ) );
+        file.setId( dto.getId() );
+
+        return file;
+    }
+}

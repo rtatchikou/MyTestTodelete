@@ -1,0 +1,51 @@
+package com.lyncwork.services.expensify.client.expensify.hystrix;
+
+import com.lyncwork.services.expensify.client.expensify.client.GustoClient;
+import com.lyncwork.services.gusto.client.gusto.payload.Company;
+import com.lyncwork.services.gusto.client.gusto.payload.Employee;
+import com.lyncwork.services.gusto.client.gusto.payload.Termination;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+
+@Component
+public class GustoFallback implements GustoClient {
+
+    @Override
+    public void getAuthorizeCode(String client_id, String redirect_uri, String response_type) {
+
+    }
+
+    @Override
+    public Map<String, Object> getAccessToken(String client_id, String redirect_uri, String client_secret, String grant_type, String code) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getAccessTokenByUsingRefreshToken(String clientId, String redirectUri, String clientSecret, String grantType, String refreshToken) {
+        return null;
+    }
+
+    @Override
+    public List<Company> getCompanyID(String authorization) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> provisionUser(String companyId, String userDTO) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> getAllEmployees(String companyId) {
+        return null;
+    }
+
+    @Override
+    public Termination setTermination(String employeeId, String terminationBody) {
+        return null;
+    }
+
+
+}

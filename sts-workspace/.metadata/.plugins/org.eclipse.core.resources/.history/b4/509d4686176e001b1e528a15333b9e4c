@@ -1,0 +1,25 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.request.member.recover;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.member.UserRequest;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class RecoverMemberRequest {
+	private UserRequest user;
+
+	public UserRequest getUser() {
+		return user;
+	}
+
+	public void setUser(UserRequest user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "RecoverMemberRequest{" +
+				"user=" + user +
+				'}';
+	}
+}

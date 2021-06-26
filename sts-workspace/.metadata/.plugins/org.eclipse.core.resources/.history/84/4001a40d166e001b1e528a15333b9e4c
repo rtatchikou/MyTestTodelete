@@ -1,0 +1,39 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder.create;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SetAccessInheritenceRequest {
+
+	@JsonProperty("shared_folder_id")
+	private String sharedFolderId;
+	
+	@JsonProperty("access_inheritance")
+	private String accessInheritance;
+
+	public String getSharedFolderId() {
+		return sharedFolderId;
+	}
+
+	public void setSharedFolderId(String sharedFolderId) {
+		this.sharedFolderId = sharedFolderId;
+	}
+
+	public String getAccessInheritance() {
+		return accessInheritance;
+	}
+
+	public void setAccessInheritance(String accessInheritance) {
+		this.accessInheritance = accessInheritance;
+	}
+
+	@Override
+	public String toString() {
+		return "SetAccessInheritenceRequest{" +
+				"sharedFolderId='" + sharedFolderId + '\'' +
+				", accessInheritance='" + accessInheritance + '\'' +
+				'}';
+	}
+}

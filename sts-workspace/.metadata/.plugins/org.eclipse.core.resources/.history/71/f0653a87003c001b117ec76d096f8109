@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gusto
+  namespace: default
+  labels:
+    app: gusto
+spec:
+  selector:
+    app: gusto
+  ports:
+    - name: http
+      port: 8084

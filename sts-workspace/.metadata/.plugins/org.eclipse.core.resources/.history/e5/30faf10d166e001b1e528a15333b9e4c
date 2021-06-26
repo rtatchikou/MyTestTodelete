@@ -1,0 +1,27 @@
+package com.lyncwork.services.dropbox.client.dropbox.utils;
+
+public final class Constants {
+
+    public static final String DROPBOX_API_SELECT_USER= "Dropbox-API-Select-User";
+    public static final String DROPBOX_API_PATH_ROOT = "Dropbox-API-Path-Root";
+    public static final String PARENT_FOLDER_NAMESPACE_ID = "Parent-Folder-Name-Space-Id";
+    public static final String NAME_SPACE_ID = "namespace_id";
+    public static final String ROOT_FOLDER_NAME =  "Lyncwork's shared workspace";
+    public static final String ROOT_FOLDER_NAMESPACE_ID =  "Root-Name-Space-Id";
+    public static final String TEAM_ADMIN = "team_admin";
+    public static final String TEAM_ACTIVE_STATUS = "active";
+    public static final String DROPBOX_API_ARG = "Dropbox-API-Arg";
+    public static final String HEADER_FILE_INFO = "File-Info";
+    public static final String ENVIRONMENT_API_PATH_ROOT = "Dropbox-API-Path-Root";
+    public static final String ENVIRONMENT_FOLDER_NAMESPACE_ID = "Environment-Folder-Name-Space-Id";
+
+
+    public static final String BEARER = "Bearer";
+    public static final String DROPBOX_GRANTTYPE = "grant_type";
+    public static final String DROPBOX_FRONTEND_REDIRECT_URL="frontend-redirect-url";
+    public static final String DROPBOX_CODE="code";
+
+
+    private Constants() {
+    }
+}

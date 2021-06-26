@@ -1,0 +1,19 @@
+package com.lyncwork.services.expensify.processors;
+
+public class Constants {
+
+    public static final String APPLICATION_NAME = "gusto";
+    public static final String GUSTO_APPLICATION_NAME = "application-name";
+    public static final String GUSTO_CLIENT_ID = "client_id";
+    public static final String GUSTO_CLIENT_SECRET = "client_secret";
+    public static final String GUSTO_ACCESS_TOKEN = "access_token";
+    public static final String GUSTO_REFRESH_TOKEN = "refresh_token";
+    public static final String GUSTO_EXPIRATION_TIME_SECONDS = "expiration_time_seconds";
+    public static final String GUSTO_REDIRECT_URI = "redirect_uri";
+    public static final String GUSTO_RESPONSE_TYPE = "response_type";
+    public static final String GUSTO_AUTHORIZATION_CODE = "authorization_code";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER = "Bearer";
+    public static final String GUSTO_COMPANY_ID = "companyid";
+    public static final String GUSTO_FRONTEND_REDIRECT_URL="frontend-redirect-url";
+}

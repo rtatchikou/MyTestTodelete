@@ -1,0 +1,191 @@
+package com.lyncwork.services.store.service.mapper;
+
+import com.lyncwork.services.store.domain.Application;
+import com.lyncwork.services.store.domain.ApplicationCapability;
+import com.lyncwork.services.store.domain.ApplicationCategory;
+import com.lyncwork.services.store.domain.ApplicationProperty;
+import com.lyncwork.services.store.service.dto.ApplicationCapabilityDTO;
+import com.lyncwork.services.store.service.dto.ApplicationCategoryDTO;
+import com.lyncwork.services.store.service.dto.ApplicationDTO;
+import com.lyncwork.services.store.service.dto.ApplicationPropertyDTO;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2020-11-10T19:26:41-0500",
+    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
+)
+@Component
+public class ApplicationMapperImpl implements ApplicationMapper {
+
+    @Autowired
+    private ApplicationCapabilityMapper applicationCapabilityMapper;
+    @Autowired
+    private ApplicationCategoryMapper applicationCategoryMapper;
+    @Autowired
+    private ApplicationPropertyMapper applicationPropertyMapper;
+
+    @Override
+    public List<Application> toEntity(List<ApplicationDTO> dtoList) {
+        if ( dtoList == null ) {
+            return null;
+        }
+
+        List<Application> list = new ArrayList<Application>( dtoList.size() );
+        for ( ApplicationDTO applicationDTO : dtoList ) {
+            list.add( toEntity( applicationDTO ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<ApplicationDTO> toDto(List<Application> entityList) {
+        if ( entityList == null ) {
+            return null;
+        }
+
+        List<ApplicationDTO> list = new ArrayList<ApplicationDTO>( entityList.size() );
+        for ( Application application : entityList ) {
+            list.add( toDto( application ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public ApplicationDTO toDto(Application entity) {
+        avoidBackreference( entity );
+
+        if ( entity == null ) {
+            return null;
+        }
+
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+
+        applicationDTO.setApplicationCapabilities( applicationCapabilitySetToApplicationCapabilityDTOSet( entity.getApplicationCapabilities() ) );
+        applicationDTO.setApplicationProperties( applicationPropertySetToApplicationPropertyDTOSet( entity.getApplicationProperties() ) );
+        applicationDTO.setCategories( applicationCategorySetToApplicationCategoryDTOSet( entity.getCategories() ) );
+        applicationDTO.setId( entity.getId() );
+        applicationDTO.setAppName( entity.getAppName() );
+        applicationDTO.setAppDesc( entity.getAppDesc() );
+        applicationDTO.setAppVersion( entity.getAppVersion() );
+        applicationDTO.setAppLink( entity.getAppLink() );
+        applicationDTO.setAppClipart( entity.getAppClipart() );
+        applicationDTO.setAppStatus( entity.getAppStatus() );
+        applicationDTO.setAppExpirationDate( entity.getAppExpirationDate() );
+        applicationDTO.setMultiCapabilitiesAllowed( entity.getMultiCapabilitiesAllowed() );
+        applicationDTO.setAppType( entity.getAppType() );
+
+        return applicationDTO;
+    }
+
+    @Override
+    public Application toEntity(ApplicationDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        Application application = new Application();
+
+        application.setApplicationCapabilities( applicationCapabilityDTOSetToApplicationCapabilitySet( dto.getApplicationCapabilities() ) );
+        application.setApplicationProperties( applicationPropertyDTOSetToApplicationPropertySet( dto.getApplicationProperties() ) );
+        application.setCategories( applicationCategoryDTOSetToApplicationCategorySet( dto.getCategories() ) );
+        application.setId( dto.getId() );
+        application.setAppName( dto.getAppName() );
+        application.setAppDesc( dto.getAppDesc() );
+        application.setAppVersion( dto.getAppVersion() );
+        application.setAppLink( dto.getAppLink() );
+        application.setAppClipart( dto.getAppClipart() );
+        application.setAppStatus( dto.getAppStatus() );
+        application.setAppExpirationDate( dto.getAppExpirationDate() );
+        application.setMultiCapabilitiesAllowed( dto.getMultiCapabilitiesAllowed() );
+        application.appType( dto.getAppType() );
+
+        return application;
+    }
+
+    protected Set<ApplicationCapabilityDTO> applicationCapabilitySetToApplicationCapabilityDTOSet(Set<ApplicationCapability> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCapabilityDTO> set1 = new HashSet<ApplicationCapabilityDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCapability applicationCapability : set ) {
+            set1.add( applicationCapabilityMapper.toDto( applicationCapability ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationPropertyDTO> applicationPropertySetToApplicationPropertyDTOSet(Set<ApplicationProperty> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationPropertyDTO> set1 = new HashSet<ApplicationPropertyDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationProperty applicationProperty : set ) {
+            set1.add( applicationPropertyMapper.toDto( applicationProperty ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationCategoryDTO> applicationCategorySetToApplicationCategoryDTOSet(Set<ApplicationCategory> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCategoryDTO> set1 = new HashSet<ApplicationCategoryDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCategory applicationCategory : set ) {
+            set1.add( applicationCategoryMapper.toDto( applicationCategory ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationCapability> applicationCapabilityDTOSetToApplicationCapabilitySet(Set<ApplicationCapabilityDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCapability> set1 = new HashSet<ApplicationCapability>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCapabilityDTO applicationCapabilityDTO : set ) {
+            set1.add( applicationCapabilityMapper.toEntity( applicationCapabilityDTO ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationProperty> applicationPropertyDTOSetToApplicationPropertySet(Set<ApplicationPropertyDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationProperty> set1 = new HashSet<ApplicationProperty>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationPropertyDTO applicationPropertyDTO : set ) {
+            set1.add( applicationPropertyMapper.toEntity( applicationPropertyDTO ) );
+        }
+
+        return set1;
+    }
+
+    protected Set<ApplicationCategory> applicationCategoryDTOSetToApplicationCategorySet(Set<ApplicationCategoryDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ApplicationCategory> set1 = new HashSet<ApplicationCategory>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( ApplicationCategoryDTO applicationCategoryDTO : set ) {
+            set1.add( applicationCategoryMapper.toEntity( applicationCategoryDTO ) );
+        }
+
+        return set1;
+    }
+}

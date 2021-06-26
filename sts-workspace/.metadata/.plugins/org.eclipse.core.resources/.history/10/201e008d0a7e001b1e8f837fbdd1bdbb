@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DropboxMemberServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.client.dropbox.service.impl</a> &gt; <span class="el_source">DropboxMemberServiceImpl.java</span></div><h1>DropboxMemberServiceImpl.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.client.dropbox.service.impl;
+
+import com.amazonaws.services.managedblockchain.model.DeleteMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.client.member.DropboxMemberClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.member.add.AddMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.member.list.ListMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.member.recover.RecoverMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.member.add.AddMemberWrapper;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.member.delete.DeleteResponse;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.member.list.ListMember;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.member.recover.RecoverMemberErrorResponse;
+import com.lyncwork.services.dropbox.client.dropbox.service.DropboxMemberService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+
+@Component
+<span class="nc" id="L20">public class DropboxMemberServiceImpl implements DropboxMemberService {</span>
+
+<span class="nc" id="L22">	private static final Logger log = LoggerFactory.getLogger(DropboxMemberServiceImpl.class);</span>
+	@Autowired
+	private DropboxMemberClientFeign dropboxMemberClientFeign;
+	
+	@Override
+	public void addMember(AddMemberRequest addMember) {
+<span class="nc" id="L28">		AddMemberWrapper wrapper = dropboxMemberClientFeign.addMember(addMember);</span>
+<span class="nc" id="L29">		log.info(&quot;Add member response : {}&quot;, wrapper);</span>
+<span class="nc" id="L30">	}</span>
+
+
+	@Override
+	public void getMembers(int limit, boolean includeRemoved) {
+<span class="nc" id="L35">		ListMember members = dropboxMemberClientFeign.getMembers(new ListMemberRequest(limit, includeRemoved));</span>
+<span class="nc" id="L36">		log.info(&quot;List members : {}&quot;, members);</span>
+<span class="nc" id="L37">	}</span>
+
+
+	@Override
+	public void deleteMember(DeleteMemberRequest request) {
+<span class="nc" id="L42">		DeleteResponse deleteResponse = dropboxMemberClientFeign.deleteMember(request);</span>
+<span class="nc" id="L43">		log.info(&quot;Delete member : {}&quot;, deleteResponse);</span>
+<span class="nc" id="L44">	}</span>
+
+
+	@Override
+	public void recoverMember(RecoverMemberRequest request) {
+<span class="nc" id="L49">		RecoverMemberErrorResponse err = dropboxMemberClientFeign.recoverMember(request);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if(err != null) {</span>
+<span class="nc" id="L51">			log.warn(&quot;Recover member err response : {}&quot;, err);</span>
+		} else {
+<span class="nc" id="L53">			log.info(&quot;User {} has been recovered. Please check the dropbox console.&quot;, request.getUser().getTeamMemberId());</span>
+		}
+		
+<span class="nc" id="L56">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

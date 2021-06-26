@@ -1,0 +1,17 @@
+package com.lyncwork.services.dropbox.client.dropbox.service;
+
+
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.add.AddGroupMemberRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.add.CreateGroupRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.list.GroupListRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.group.add.CreateGroupResponse;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.group.list.GroupListResponse;
+
+public interface GroupService {
+	
+	GroupListResponse getGroups(GroupListRequest request);
+
+	CreateGroupResponse createGroup(CreateGroupRequest request);
+
+	void addGroupMembers(AddGroupMemberRequest addGroupMemberRequest);
+}

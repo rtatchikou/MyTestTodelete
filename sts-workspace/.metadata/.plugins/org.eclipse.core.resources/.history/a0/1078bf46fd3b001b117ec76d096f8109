@@ -1,0 +1,20 @@
+package com.lyncwork.services.gusto.service.mapper;
+
+
+import com.lyncwork.services.gusto.domain.UserIntegrationQueue;
+import com.lyncwork.services.gusto.service.dto.UserIntegrationQueueDTO;
+import org.mapstruct.Mapper;
+
+/**
+ * Mapper for the entity {@link UserIntegrationQueue} and its DTO {@link UserIntegrationQueueDTO}.
+ */
+@Mapper(componentModel = "spring",
+        uses = {UserIntegrationMessageMapper.class})
+public interface UserIntegrationQueueMapper extends EntityMapper<UserIntegrationQueueDTO, UserIntegrationQueue> {
+
+    @Override
+    UserIntegrationQueue toEntity(UserIntegrationQueueDTO dto);
+
+    @Override
+    UserIntegrationQueueDTO toDto(UserIntegrationQueue entity);
+}

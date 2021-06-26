@@ -1,0 +1,39 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.request.member;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class MemberRequest {
+	
+	@JsonProperty("user")
+	private UserRequest user;
+	
+	@JsonProperty("access_type")
+	private String accessType;
+
+	public UserRequest getUser() {
+		return user;
+	}
+
+	public void setUser(UserRequest user) {
+		this.user = user;
+	}
+
+	public String getAccessType() {
+		return accessType;
+	}
+
+	public void setAccessType(String accessType) {
+		this.accessType = accessType;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberRequest{" +
+				"user=" + user +
+				", accessType='" + accessType + '\'' +
+				'}';
+	}
+}

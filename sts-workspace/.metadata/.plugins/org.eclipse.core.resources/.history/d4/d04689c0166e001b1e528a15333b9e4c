@@ -1,0 +1,69 @@
+package com.lyncwork.services.hellosign.client.dropbox.config;
+
+import feign.RequestInterceptor;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import feign.form.FormEncoder;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.HttpMessageConverter;
+
+import com.lyncwork.services.hellosign.client.dropbox.service.AuthService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class RequestDropboxAPIConfig  {
+
+    @Autowired
+    private AuthService authService;
+
+    @Bean
+    public Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> messageConverters) {
+        return new FormEncoder(new SpringEncoder(messageConverters));
+    }
+
+    @Bean
+    public Decoder feignDecoder(ObjectFactory<HttpMessageConverters> messageConverters) {
+
+        List<HttpMessageConverter<?>> springConverters = messageConverters.getObject().getConverters();
+        List<HttpMessageConverter<?>> decoderConverters = new ArrayList<HttpMessageConverter<?>>(springConverters.size() + 1);
+        decoderConverters.addAll(springConverters);
+
+        CustomConverter customConverter = new CustomConverter();
+        decoderConverters.add(customConverter);
+
+        HttpMessageConverters httpMessageConverters = new HttpMessageConverters(decoderConverters);
+
+        return new SpringDecoder(new ObjectFactory<HttpMessageConverters>() {
+            @Override
+            public HttpMessageConverters getObject() throws BeansException {
+                return httpMessageConverters;
+            }
+
+        });
+
+    }
+
+/*
+    @Bean
+    public Decoder feignDecoder(ObjectFactory<HttpMessageConverters> messageConverters) {
+        return new SpringDecoder(messageConverters);
+    }
+
+ */
+
+    @Bean
+    public RequestInterceptor requestInterceptor() {
+        return requestTemplate -> {
+            requestTemplate.header("Authorization", "Bearer " + authService.getToken());
+        };
+    }
+}
+

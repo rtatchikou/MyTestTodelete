@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.client.dropbox.config</a> &gt; <span class="el_source">AuthConfig.java</span></div><h1>AuthConfig.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.client.dropbox.config;
+
+import feign.RequestInterceptor;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import feign.form.FormEncoder;
+import feign.jackson.JacksonDecoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Base64;
+
+<span class="nc" id="L17">public class AuthConfig  {</span>
+
+    @Value(&quot;${dropbox.app_key}&quot;)
+    private String appKey;
+
+    @Value(&quot;${dropbox.app_secret}&quot;)
+    private String appSecret;
+
+    @Autowired
+    private String basic;
+
+    @Bean
+    public Encoder feignFormEncoder(ObjectFactory&lt;HttpMessageConverters&gt; messageConverters) {
+<span class="nc" id="L30">        return new FormEncoder(new SpringEncoder(messageConverters));</span>
+    }
+
+    @Bean
+    public Decoder feignDecoder() {
+<span class="nc" id="L35">        return new JacksonDecoder();</span>
+    }
+
+    @Bean
+    public RequestInterceptor requestInterceptor() {
+<span class="nc" id="L40">        return requestTemplate -&gt; {</span>
+<span class="nc" id="L41">            requestTemplate.header(&quot;Authorization&quot;, &quot;Basic &quot; + basic);</span>
+<span class="nc" id="L42">        };</span>
+    }
+
+    @Bean
+    private String basic() {
+<span class="nc" id="L47">        java.util.Base64.Encoder encode = Base64.getEncoder();</span>
+<span class="nc" id="L48">        String appKeySecret = new StringBuffer().append(appKey).append(&quot;:&quot;).append(appSecret).toString();</span>
+<span class="nc" id="L49">        byte[] encoded = encode.encode(appKeySecret.getBytes());</span>
+<span class="nc" id="L50">        String key = new String(encoded);</span>
+<span class="nc" id="L51">        return key;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

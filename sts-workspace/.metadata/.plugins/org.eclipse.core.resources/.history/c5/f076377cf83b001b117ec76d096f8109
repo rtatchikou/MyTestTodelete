@@ -1,0 +1,21 @@
+package com.lyncwork.services.gusto.client.store.hystrix;
+
+import com.lyncwork.services.gusto.client.store.Response.SubscriptionAppResponse;
+import com.lyncwork.services.gusto.client.store.client.SubscriptionAppClient;
+import org.springframework.stereotype.Component;
+
+@Component
+
+public class SubscriptionAppClientFallback implements SubscriptionAppClient {
+
+
+    @Override
+    public SubscriptionAppResponse getApplicationProperties(String identifier) {
+        return null;
+    }
+
+    @Override
+    public SubscriptionAppResponse postApplicationProperties(SubscriptionAppResponse subscriptionAppResponse) {
+        return null;
+    }
+}

@@ -1,0 +1,78 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.response.group.add;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.group.GroupManagementTypeResponse;
+
+import java.util.List;
+
+@JsonInclude(Include.NON_NULL)
+public class CreateGroupResponse {
+
+	@JsonProperty("group_name")
+	private String groupName;
+	
+	@JsonProperty("group_id")
+	private String groupId;
+	
+	@JsonProperty("group_management_type")
+	private GroupManagementTypeResponse groupManagementType;
+	
+	@JsonProperty("member_count")
+	private String memberCount;
+	
+	@JsonProperty("members")
+	private List<GroupAddResponse> members;
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	public GroupManagementTypeResponse getGroupManagementType() {
+		return groupManagementType;
+	}
+
+	public void setGroupManagementType(GroupManagementTypeResponse groupManagementType) {
+		this.groupManagementType = groupManagementType;
+	}
+
+	public String getMemberCount() {
+		return memberCount;
+	}
+
+	public void setMemberCount(String memberCount) {
+		this.memberCount = memberCount;
+	}
+
+	public List<GroupAddResponse> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<GroupAddResponse> members) {
+		this.members = members;
+	}
+
+	@Override
+	public String toString() {
+		return "CreateGroupResponse{" +
+				"groupName='" + groupName + '\'' +
+				", groupId='" + groupId + '\'' +
+				", groupManagementType=" + groupManagementType +
+				", memberCount='" + memberCount + '\'' +
+				", members=" + members +
+				'}';
+	}
+}

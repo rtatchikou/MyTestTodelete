@@ -1,0 +1,61 @@
+package com.lyncwork.services.expensify.client.expensify.client;
+
+import com.lyncwork.services.expensify.client.expensify.config.ExpensifyConfig;
+import com.lyncwork.services.expensify.client.expensify.hystrix.ExpensifyFallback;
+import com.lyncwork.services.expensify.client.expensify.payload.Company;
+import com.lyncwork.services.expensify.client.expensify.payload.Employee;
+import com.lyncwork.services.expensify.client.expensify.payload.Termination;
+import com.lyncwork.services.expensify.processors.Constants;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@FeignClient(value = "gustoClient",
+    url = "https://api.gusto-demo.com",
+    configuration = ExpensifyConfig.class,
+    fallback = ExpensifyFallback.class
+)
+public interface ExpensifyClient {
+
+    @RequestMapping(method = RequestMethod.GET,
+        value = "oauth/token?client_id={client_id}&redirect_uri={redirect_uri}&response_type={response_type}")
+    void getAuthorizeCode(@PathVariable("client_id") String clientId,
+                          @PathVariable("redirect_uri") String redirectUri,
+                          @PathVariable("response_type") String responseType);
+
+    @RequestMapping(method = RequestMethod.POST,
+        value = "oauth/token?client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={code}&grant_type={grant_type}")
+    Map<String, Object> getAccessToken(@PathVariable("client_id") String clientId,
+                                       @PathVariable("redirect_uri") String redirectUri,
+                                       @PathVariable("client_secret") String clientSecret,
+                                       @PathVariable("grant_type") String grantType,
+                                       @PathVariable("code") String code);
+
+    @RequestMapping(method = RequestMethod.POST,
+        value = "oauth/token?client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&refresh_token={refresh_token}&grant_type={grant_type}")
+    Map<String, Object> getAccessTokenByUsingRefreshToken(@PathVariable("client_id") String clientId,
+                                       @PathVariable("redirect_uri") String redirectUri,
+                                       @PathVariable("client_secret") String clientSecret,
+                                       @PathVariable("grant_type") String grantType,
+                                       @PathVariable("refresh_token") String refreshToken);
+
+
+    @RequestMapping(method = RequestMethod.GET,value = "v1/companies")
+    List<Company> getCompanyID(@RequestHeader (Constants.AUTHORIZATION_HEADER)String authorization);
+
+    @RequestMapping(method = RequestMethod.POST,
+        value = "/v1/companies/{company_id}/employees")
+    Map<String, Object> provisionUser(@PathVariable("company_id") String companyId,
+    @RequestBody String userDTO);
+
+    @RequestMapping(method = RequestMethod.GET,
+        value = "/v1/companies/{company_id}/employees")
+    List<Employee> getAllEmployees(@PathVariable("company_id") String companyId);
+
+    @RequestMapping(method = RequestMethod.POST,
+        value = "v1/employees/{employee_id}/terminations")
+   Termination setTermination(@PathVariable("employee_id")String employeeId,@RequestBody String terminationBody);
+}

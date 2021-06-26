@@ -1,0 +1,19 @@
+package com.efunzo.be.trainig;
+
+public class Jaws extends Movie {
+
+	public Jaws() {
+		super("Jaws");
+		
+	}
+	
+    private String getDescription() {
+		
+		return "The Jaws is good movi ... ";
+	}
+	
+	private int getDuration() {
+		
+		return 3454636;
+	}
+}

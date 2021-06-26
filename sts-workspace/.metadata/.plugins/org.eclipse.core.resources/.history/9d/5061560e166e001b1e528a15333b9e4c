@@ -1,0 +1,36 @@
+package com.lyncwork.services.dropbox.service.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.lyncwork.services.hellosign.domain.User;
+import com.lyncwork.services.hellosign.service.dto.UserDTO;
+
+;
+
+/**
+ * Mapper for the entity {@link User} and its DTO {@link UserDTO}.
+ */
+@Mapper(componentModel = "spring", uses={
+        FileMapper.class,
+        CompanyMapper.class
+})
+public interface UserMapper extends EntityMapper<UserDTO, User> {
+    Logger logger = LoggerFactory.getLogger(UserMapper.class);
+
+    @Override
+    @Mapping(source = "emailPrimary", target = "emailPrimary")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "company", target = "company")
+    @Mapping(source = "userRole", target = "userRole")
+    UserDTO toDto(User entity);
+
+    @Override
+    @Mapping(source = "emailPrimary", target = "emailPrimary")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "company", target = "company")
+    @Mapping(source = "userRole", target = "userRole")
+    User toEntity(UserDTO dto);
+}

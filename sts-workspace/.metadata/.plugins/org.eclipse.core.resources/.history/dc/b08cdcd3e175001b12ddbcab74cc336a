@@ -1,0 +1,12 @@
+#! /bin/bash
+
+environment="$1"
+DROPBOX_TAG="387856044462.dkr.ecr.us-east-1.amazonaws.com/dropbox"
+ if [ "${environment}" = "prod" ]; then
+        environment = "latest"
+fi
+
+    docker tag dropbox ${DROPBOX_TAG}:${environment} && \
+    docker push ${DROPBOX_TAG}:${environment}
+
+exit 0;

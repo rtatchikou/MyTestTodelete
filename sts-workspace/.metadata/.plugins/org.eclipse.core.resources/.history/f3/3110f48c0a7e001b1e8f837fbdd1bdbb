@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddGroupMemberRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.client.dropbox.model.request.group.add</a> &gt; <span class="el_source">AddGroupMemberRequest.java</span></div><h1>AddGroupMemberRequest.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.client.dropbox.model.request.group.add;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.group.GroupMemberRequest;
+import com.lyncwork.services.dropbox.client.dropbox.model.request.group.GroupRequest;
+
+import java.util.List;
+
+
+@JsonInclude(Include.NON_NULL)
+<span class="nc" id="L13">public class AddGroupMemberRequest {</span>
+	
+	@JsonProperty(&quot;group&quot;)
+	private GroupRequest group;
+	
+	@JsonProperty(&quot;members&quot;)
+	private List&lt;GroupMemberRequest&gt; members;
+	
+	@JsonProperty(&quot;return_members&quot;)
+	private boolean returnMembers;
+
+	public GroupRequest getGroup() {
+<span class="nc" id="L25">		return group;</span>
+	}
+
+	public void setGroup(GroupRequest group) {
+<span class="nc" id="L29">		this.group = group;</span>
+<span class="nc" id="L30">	}</span>
+
+	public List&lt;GroupMemberRequest&gt; getMembers() {
+<span class="nc" id="L33">		return members;</span>
+	}
+
+	public void setMembers(List&lt;GroupMemberRequest&gt; members) {
+<span class="nc" id="L37">		this.members = members;</span>
+<span class="nc" id="L38">	}</span>
+
+	public boolean isReturnMembers() {
+<span class="nc" id="L41">		return returnMembers;</span>
+	}
+
+	public void setReturnMembers(boolean returnMembers) {
+<span class="nc" id="L45">		this.returnMembers = returnMembers;</span>
+<span class="nc" id="L46">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L50">		return &quot;AddGroupMemberRequest{&quot; +</span>
+				&quot;group=&quot; + group +
+				&quot;, members=&quot; + members +
+				&quot;, returnMembers=&quot; + returnMembers +
+				'}';
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

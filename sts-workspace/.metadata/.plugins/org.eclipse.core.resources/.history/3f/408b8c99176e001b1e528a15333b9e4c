@@ -1,0 +1,36 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.request.teamfolder.create;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class FolderMemberRequest {
+
+	@JsonProperty("member")
+	private FolderMemberTagRequest member;
+	
+	@JsonProperty("access_level")
+	private String accessLevel;
+
+	public FolderMemberTagRequest getMember() {
+		return member;
+	}
+
+	public void setMember(FolderMemberTagRequest member) {
+		this.member = member;
+	}
+
+	public String getAccessLevel() {
+		return accessLevel;
+	}
+
+	public void setAccessLevel(String accessLevel) {
+		this.accessLevel = accessLevel;
+	}
+
+	@Override
+	public String toString() {
+		return "FolderMemberRequest{" +
+				"member=" + member +
+				", accessLevel='" + accessLevel + '\'' +
+				'}';
+	}
+}

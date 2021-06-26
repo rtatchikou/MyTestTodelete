@@ -1,0 +1,12 @@
+package com.efunzo.be.training;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Door door = new Door(false);
+		Tire tire - new Tire(18);
+
+	}
+
+}

@@ -1,0 +1,32 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.request.teamfolder;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+@JsonInclude(Include.NON_NULL)
+public class FilePath {
+	
+	@JsonProperty("path")
+	private String path;
+
+	public FilePath(String path) {
+		this.path = path;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	@Override
+	public String toString() {
+		return "FilePath{" +
+				"path='" + path + '\'' +
+				'}';
+	}
+}

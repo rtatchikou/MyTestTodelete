@@ -1,0 +1,21 @@
+package com.lyncwork.services.dropbox.client.dropbox.config;
+
+public class DropboxConfigException extends RuntimeException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public DropboxConfigException() {
+		super();
+	}
+	
+	public DropboxConfigException(Throwable e) {
+		super(e);
+	}
+
+	public DropboxConfigException(String string) {
+		super(string);
+	}
+	
+}

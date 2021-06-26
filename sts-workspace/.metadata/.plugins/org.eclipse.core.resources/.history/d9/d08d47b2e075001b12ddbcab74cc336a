@@ -1,0 +1,94 @@
+@startuml
+skinparam backgroundColor #EEEBDC
+skinparam sequence {
+	ArrowColor DeepSkyBlue
+	LifeLineBorderColor blue
+	LifeLineBackgroundColor #A9DCDF
+
+	ParticipantBorderColor DeepSkyBlue
+	ParticipantBackgroundColor DodgerBlue
+	ParticipantFontSize 17
+	ParticipantFontColor #A9DCDF
+
+	ActorBackgroundColor aqua
+	ActorFontColor DeepSkyBlue
+	ActorFontSize 17
+	ActorFontName Aapex
+}
+
+participant FrontEnd
+participant FrontDoor
+participant LWDropboxService
+participant DropboxServer
+
+title Provision Tenant
+autonumber  " <font color=red><b>[0] "
+FrontEnd -> FrontEnd :
+
+note right
+valid request body
+valid JWT token
+end note
+FrontEnd -> FrontDoor : POST /client/companies/provision
+note right
+POST /api/provision/tenant
+Body:
+companyName
+
+Header:
+Signed JWT token
+containing userName
+tenantId and ADMIN authority
+end note
+FrontDoor -> LWDropboxService : POST /api/provision/tenant
+LWDropboxService -> LWDropboxService : validateJWTToken()
+alt has ADMIN authority and tenantId != null
+LWDropboxService -> DropboxServer : POST /team/namespaces/list
+DropboxServer --> LWDropboxService : GetNamespacesResponse
+LWDropboxService -> LWDropboxService : parseGetNamespacesResponse()
+
+opt environment space does not exit
+LWDropboxService -> DropboxServer : POST /team/members/list
+DropboxServer --> LWDropboxService : LisTMemberResponse
+LWDropboxService -> LWDropboxService : extractLinkWorkAdminIdFromResponse()
+
+note right
+POST /files/create_folder_v2
+Body:
+dropbox admin userId
+root namespaceId
+environment folder's path to create
+
+Header:
+refreshable auth token
+stored in database
+end note
+
+LWDropboxService -> DropboxServer : POST /files/create_folder_v2
+DropboxServer --> LWDropboxService : CreateTeamFolderResponse
+end opt
+LWDropboxService -> LWDropboxService : findByTenantId()
+
+opt tenant company not found in database
+note right
+POST /files/create_folder_v2
+Body:
+dropbox admin userId
+environment folder namespaceId
+
+Header:
+refreshable auth token
+stored in database
+end note
+LWDropboxService -> DropboxServer : POST /files/create_folder_v2
+DropboxServer --> LWDropboxService : CreateTeamFolderResponse
+end opt
+LWDropboxService --> FrontDoor: ProvisionTenantResponse
+
+else
+LWDropboxService --> FrontDoor : error
+end alt
+
+
+
+@enduml

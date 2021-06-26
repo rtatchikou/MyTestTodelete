@@ -1,0 +1,323 @@
+package com.lyncwork.services.store.web.rest;
+
+import com.lyncwork.services.store.StoreApp;
+import com.lyncwork.services.store.domain.Workflow;
+import com.lyncwork.services.store.repository.WorkflowRepository;
+import com.lyncwork.services.store.service.WorkflowService;
+import com.lyncwork.services.store.service.dto.WorkflowDTO;
+import com.lyncwork.services.store.service.mapper.WorkflowMapper;
+import com.lyncwork.services.store.web.rest.errors.ExceptionTranslator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+
+import static com.lyncwork.services.store.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * Integration tests for the {@link WorkflowResource} REST controller.
+ */
+@SpringBootTest(classes = StoreApp.class)
+public class WorkflowResourceIT {
+
+    private static final String DEFAULT_WORKFLOW_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_WORKFLOW_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_WORKFLOW_DESC = "AAAAAAAAAA";
+    private static final String UPDATED_WORKFLOW_DESC = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_ACTIVE = Boolean.TRUE;
+    private static final Boolean UPDATED_ACTIVE = Boolean.FALSE;
+
+    @Autowired
+    private WorkflowRepository workflowRepository;
+
+    @Autowired
+    private WorkflowMapper workflowMapper;
+
+    @Autowired
+    private WorkflowService workflowService;
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private Validator validator;
+
+    private MockMvc restWorkflowMockMvc;
+
+    private Workflow workflow;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final WorkflowResource workflowResource = new WorkflowResource(workflowService);
+        this.restWorkflowMockMvc = MockMvcBuilders.standaloneSetup(workflowResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+
+    }
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Workflow createEntity(EntityManager em) {
+        Workflow workflow = new Workflow()
+            .workflowDesc(DEFAULT_WORKFLOW_DESC)
+            .workflowName(DEFAULT_WORKFLOW_NAME)
+            .active(DEFAULT_ACTIVE);
+        return workflow;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Workflow createUpdatedEntity(EntityManager em) {
+        Workflow workflow = new Workflow()
+            .workflowDesc(UPDATED_WORKFLOW_DESC)
+            .workflowName(UPDATED_WORKFLOW_NAME)
+            .active(UPDATED_ACTIVE);
+        return workflow;
+    }
+
+    @BeforeEach
+    public void initTest() {
+        workflow = createEntity(em);
+        workflowRepository.deleteAll();
+        workflowRepository.flush();
+    }
+
+    @Test
+    @Transactional
+    public void createWorkflow() throws Exception {
+        int databaseSizeBeforeCreate = workflowRepository.findAll().size();
+
+        // Create the Workflow
+        WorkflowDTO workflowDTO = workflowMapper.toDto(workflow);
+        restWorkflowMockMvc.perform(post("/api/workflows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(status().isCreated());
+
+        // Validate the Workflow in the database
+        List<Workflow> workflowList = workflowRepository.findAll();
+        assertThat(workflowList).hasSize(databaseSizeBeforeCreate + 1);
+        Workflow testWorkflow = workflowList.get(workflowList.size() - 1);
+        assertThat(testWorkflow.getWorkflowName()).isEqualTo(DEFAULT_WORKFLOW_NAME);
+        assertThat(testWorkflow.getWorkflowDesc()).isEqualTo(DEFAULT_WORKFLOW_DESC);
+        assertThat(testWorkflow.getActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testWorkflow.getSysCreationDate()).isNotNull();
+        assertThat(testWorkflow.getSysUpdateDate()).isAfterOrEqualTo(testWorkflow.getSysCreationDate());
+        assertThat(testWorkflow.getLastUpdatedBy()).isNotNull();
+        assertThat(testWorkflow.getCreatedBy()).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void createWorkflowWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = workflowRepository.findAll().size();
+
+        // Create the Workflow with an existing ID
+        workflow.setId(1L);
+        WorkflowDTO workflowDTO = workflowMapper.toDto(workflow);
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restWorkflowMockMvc.perform(post("/api/workflows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the Workflow in the database
+        List<Workflow> workflowList = workflowRepository.findAll();
+        assertThat(workflowList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWorkflows() throws Exception {
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        // Get all the workflowList
+        restWorkflowMockMvc.perform(get("/api/workflows?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(workflow.getId().intValue())))
+            .andExpect(jsonPath("$.[*].workflowName").value(hasItem(DEFAULT_WORKFLOW_NAME)))
+            .andExpect(jsonPath("$.[*].workflowDesc").value(hasItem(DEFAULT_WORKFLOW_DESC)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE)));
+    }
+
+    @Test
+    @Transactional
+    public void getWorkflow() throws Exception {
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        // Get the workflow
+        restWorkflowMockMvc.perform(get("/api/workflows/{id}", workflow.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(workflow.getId().intValue()))
+            .andExpect(jsonPath("$.workflowName").value(DEFAULT_WORKFLOW_NAME))
+            .andExpect(jsonPath("$.workflowDesc").value(DEFAULT_WORKFLOW_DESC))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE));
+    }
+
+    @Test
+    @Transactional
+    public void getNonExistingWorkflow() throws Exception {
+        // Get the workflow
+        restWorkflowMockMvc.perform(get("/api/workflows/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void updateWorkflow() throws Exception {
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        int databaseSizeBeforeUpdate = workflowRepository.findAll().size();
+
+        // Update the workflow
+        Workflow updatedWorkflow = workflowRepository.findById(workflow.getId()).get();
+        // Disconnect from session so that the updates on updatedWorkflow are not directly saved in db
+        em.detach(updatedWorkflow);
+        updatedWorkflow
+            .workflowName(UPDATED_WORKFLOW_NAME)
+            .workflowDesc(UPDATED_WORKFLOW_DESC)
+            .active(UPDATED_ACTIVE);
+        WorkflowDTO workflowDTO = workflowMapper.toDto(updatedWorkflow);
+
+        restWorkflowMockMvc.perform(put("/api/workflows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the Workflow in the database
+        List<Workflow> workflowList = workflowRepository.findAll();
+        assertThat(workflowList).hasSize(databaseSizeBeforeUpdate);
+        Workflow testWorkflow = workflowList.get(workflowList.size() - 1);
+        assertThat(testWorkflow.getWorkflowName()).isEqualTo(UPDATED_WORKFLOW_NAME);
+        assertThat(testWorkflow.getWorkflowDesc()).isEqualTo(UPDATED_WORKFLOW_DESC);
+        assertThat(testWorkflow.getActive()).isEqualTo(UPDATED_ACTIVE);
+        assertThat(testWorkflow.getSysCreationDate()).isNotNull();
+        assertThat(testWorkflow.getSysUpdateDate()).isAfter(testWorkflow.getSysCreationDate());
+        assertThat(testWorkflow.getLastUpdatedBy()).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void updateNonExistingWorkflow() throws Exception {
+        int databaseSizeBeforeUpdate = workflowRepository.findAll().size();
+
+        // Create the Workflow
+        WorkflowDTO workflowDTO = workflowMapper.toDto(workflow);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restWorkflowMockMvc.perform(put("/api/workflows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the Workflow in the database
+        List<Workflow> workflowList = workflowRepository.findAll();
+        assertThat(workflowList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    public void deleteWorkflow() throws Exception {
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        int databaseSizeBeforeDelete = workflowRepository.findAll().size();
+
+        // Delete the workflow
+        restWorkflowMockMvc.perform(delete("/api/workflows/{id}", workflow.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<Workflow> workflowList = workflowRepository.findAll();
+        assertThat(workflowList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void createTwoWorkflowsWithTheSameName() throws Exception{
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        // Create the Workflow
+        WorkflowDTO workflowDTO = workflowMapper.toDto(workflow);
+        workflowDTO.setId(null);
+        restWorkflowMockMvc.perform(post("/api/workflows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorKey").value("uniqueconstraintviolation"));
+    }
+
+    @Test
+    public void checkTheUniqueKey() throws Exception{
+        // Initialize the database
+        workflowRepository.saveAndFlush(workflow);
+
+        WorkflowDTO workflowDTO = new WorkflowDTO();
+        workflowDTO.setWorkflowName(workflow.getWorkflowName());
+
+        // Check the uniquekey
+        restWorkflowMockMvc.perform(get("/api/workflows/check-uniquekey")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(jsonPath("$.valid").value(false));
+
+        workflowDTO.setId(workflow.getId()+1);
+        // Check the uniquekey
+        restWorkflowMockMvc.perform(get("/api/workflows/check-uniquekey")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(jsonPath("$.valid").value(false));
+
+        workflowDTO.setId(workflow.getId());
+        // Check the uniquekey
+        restWorkflowMockMvc.perform(get("/api/workflows/check-uniquekey")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(workflowDTO)))
+            .andExpect(jsonPath("$.valid").value(true));
+    }
+}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellosign
+  namespace: default
+  labels:
+    app: hellosign
+spec:
+  selector:
+    app: hellosign
+  ports:
+    - name: http
+      port: 8091

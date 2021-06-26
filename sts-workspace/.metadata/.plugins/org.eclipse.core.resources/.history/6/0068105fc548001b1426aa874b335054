@@ -1,0 +1,151 @@
+package xyz.pakwo.expensify.service.rest.template;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+import xyz.pakwo.expensify.domain.CreateInputSetting;
+import xyz.pakwo.expensify.domain.Credential;
+import xyz.pakwo.expensify.domain.GetInputSetting;
+import xyz.pakwo.expensify.domain.RequestJobDescription;
+import xyz.pakwo.expensify.domain.InputSetting;
+import xyz.pakwo.expensify.domain.UpdateInputSetting;
+import xyz.pakwo.expensify.model.Policy;
+import xyz.pakwo.expensify.model.PolicyList;
+import xyz.pakwo.expensify.model.UpdatePolicy;
+import xyz.pakwo.expensify.service.PolicyService;
+import xyz.pakwo.expensify.service.open.feign.PolicyServiceOpenFeign;
+
+@Slf4j
+public class PolicyServiceRestTemplate implements PolicyService {
+	
+	private static final Logger log = LoggerFactory.getLogger(PolicyServiceRestTemplate.class);
+
+	@Autowired
+	private Credential credential;
+	
+	@Autowired
+	private RestTemplateUtil restTemplateUtil;
+	
+	private String url;
+
+	public PolicyServiceRestTemplate(String url) {
+		this.url = url;
+	}
+
+	@Override
+	public Policy createPolicy(String policyName) {
+		log.info("Creating policy with name {}", policyName);
+		HttpHeaders headers = restTemplateUtil.createHeaders();
+		InputSetting inputSetting = new CreateInputSetting("policy", policyName);
+		RequestJobDescription request = new RequestJobDescription("create", credential, inputSetting);
+		
+		
+		MultiValueMap<String, String> data = new LinkedMultiValueMap<String, String>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			data.add("requestJobDescription", mapper.writeValueAsString(request));
+		} catch (JsonProcessingException e) {
+			log.error("error during parsing ", e);
+		}
+		
+
+		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(data, headers);
+		RestTemplate restTemplate = restTemplateUtil.createRestTemplate();
+		ResponseEntity<Policy> policy = restTemplate.exchange(url, HttpMethod.POST, entity, Policy.class);
+      
+		log.info("body : {}", policy.getBody());
+
+		return policy.getBody();
+	}
+
+	@Override
+	public PolicyList getPolicies() {
+		log.info("Fetching policies");
+		HttpHeaders headers = restTemplateUtil.createHeaders();
+		
+		InputSetting inputSetting = new GetInputSetting("policyList");
+		RequestJobDescription request = new RequestJobDescription("get", credential, inputSetting);
+
+		MultiValueMap<String, String> data = new LinkedMultiValueMap<String, String>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			data.add("requestJobDescription", mapper.writeValueAsString(request));
+		} catch (JsonProcessingException e) {
+			log.error("error during parsing ", e);
+		}
+		
+		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(data, headers);
+
+		RestTemplate restTemplate = restTemplateUtil.createRestTemplate();
+		
+		ResponseEntity<PolicyList> policies = restTemplate.exchange(url, HttpMethod.POST, entity, PolicyList.class);
+		log.info("policies {}", policies.getBody());
+		return policies.getBody();
+	}
+
+	@Override
+	public UpdatePolicy updatePolicy(String policyId, String fileLocation) {
+		log.info("Updating policy with id {}", policyId);
+		HttpHeaders headers = restTemplateUtil.createHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		
+		InputSetting inputSetting = new UpdateInputSetting("employees", policyId, "csv");
+		RequestJobDescription request = new RequestJobDescription("update", credential, inputSetting);
+		
+		
+		MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			data.add("requestJobDescription", mapper.writeValueAsString(request));
+			
+			File file = new File(fileLocation);
+			byte[] fileBytes = Files.readAllBytes(file.toPath());
+			
+			MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<String, String>();
+			ContentDisposition contentDisposition = ContentDisposition.builder("form-data")
+					.name("data")
+					.filename(file.getName())
+					.build();
+			fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+			
+			HttpEntity<byte[]> fileEntity = new HttpEntity<byte[]>(fileBytes, fileMap);
+			
+			data.add("data", fileEntity);
+		} catch (IOException e) {
+			log.error("error during parsing ", e);
+		}
+		
+		log.info("data : {}", data);
+		
+		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(data, headers);
+		RestTemplate restTemplate = restTemplateUtil.createRestTemplate();
+		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+		
+		ResponseEntity<UpdatePolicy> policy = restTemplate.exchange(url, HttpMethod.POST, entity, UpdatePolicy.class);
+
+		log.info("updated body : {}", policy.getBody());
+
+		return policy.getBody();
+	}
+
+
+}

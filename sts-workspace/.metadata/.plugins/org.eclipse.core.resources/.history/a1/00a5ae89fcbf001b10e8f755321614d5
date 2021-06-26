@@ -1,0 +1,31 @@
+package com.efunzo.be.training.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.efunzo.be.training.domaine.Address;
+import com.efunzo.be.training.domaine.User;
+import com.efunzo.be.training.repository.AddressRepository;
+import com.efunzo.be.training.repository.UserRepository;
+
+
+
+@Component
+public class AddressService {
+	
+	@Autowired
+	private AddressRepository addressRepository;
+
+
+	public Address addAddress(Address address) {
+		
+		return addressRepository.save(address);
+	}
+
+
+
+
+
+}

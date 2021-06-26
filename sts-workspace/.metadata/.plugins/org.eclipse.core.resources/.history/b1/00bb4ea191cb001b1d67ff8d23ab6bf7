@@ -1,0 +1,12 @@
+package com.ifunzo.be.training;
+
+
+public class Car {
+	
+	private int doors;
+	private int wheeles;
+	public String model;
+	private String engine;
+	private String colour;
+
+}

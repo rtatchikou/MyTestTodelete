@@ -1,0 +1,39 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class ContentSyncSetting {
+	
+	@JsonProperty("id")
+	private String id;
+	
+	@JsonProperty("sync_setting")
+	private SyncSetting syncSetting;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public SyncSetting getSyncSetting() {
+		return syncSetting;
+	}
+
+	public void setSyncSetting(SyncSetting syncSetting) {
+		this.syncSetting = syncSetting;
+	}
+
+	@Override
+	public String toString() {
+		return "ContentSyncSetting{" +
+				"id='" + id + '\'' +
+				", syncSetting=" + syncSetting +
+				'}';
+	}
+}

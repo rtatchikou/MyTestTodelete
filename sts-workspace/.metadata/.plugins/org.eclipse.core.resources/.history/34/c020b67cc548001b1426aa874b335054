@@ -1,0 +1,25 @@
+package xyz.pakwo.expensify.domain;
+
+import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
+public class GetInputSetting implements InputSetting, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String type;
+	private boolean adminOnly;
+	private String userEmail;
+
+	public GetInputSetting(String type, boolean adminOnly, String userEmail) {
+		this.type = type;
+		this.adminOnly = adminOnly;
+		this.userEmail = userEmail;
+	}
+
+}

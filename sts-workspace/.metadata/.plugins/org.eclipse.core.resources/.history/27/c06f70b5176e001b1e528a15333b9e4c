@@ -1,0 +1,41 @@
+package com.lyncwork.services.hellosign.client.hellosign.histrix.member;
+
+import com.amazonaws.services.managedblockchain.model.DeleteMemberRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.member.add.AddMemberWrapper;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.member.delete.DeleteResponse;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.member.list.ListMember;
+import com.lyncwork.services.hellosign.client.dropbox.model.response.member.recover.RecoverMemberErrorResponse;
+import com.lyncwork.services.hellosign.client.hellosign.client.member.DropboxMemberClientFeign;
+import com.lyncwork.services.hellosign.client.hellosign.model.request.member.add.AddMemberRequest;
+import com.lyncwork.services.hellosign.client.hellosign.model.request.member.list.ListMemberRequest;
+import com.lyncwork.services.hellosign.client.hellosign.model.request.member.recover.RecoverMemberRequest;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class DropboxMemberFallback implements DropboxMemberClientFeign {
+
+	@Override
+	public AddMemberWrapper addMember( AddMemberRequest request) {
+		return null;
+	}
+
+
+	@Override
+	public ListMember getMembers(ListMemberRequest request) {
+		return null;
+	}
+
+	@Override
+	public DeleteResponse deleteMember( DeleteMemberRequest request) {
+		return null;
+	}
+
+	@Override
+	public RecoverMemberErrorResponse recoverMember(RecoverMemberRequest request) {
+		return null;
+	}
+}
+
+
+

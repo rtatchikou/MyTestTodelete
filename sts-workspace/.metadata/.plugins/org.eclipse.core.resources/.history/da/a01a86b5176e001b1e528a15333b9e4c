@@ -1,0 +1,27 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.response.group;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class AccessTypeResponse {
+	
+	@JsonProperty(".tag")
+	private String tag;
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	@Override
+	public String toString() {
+		return "AccessTypeResponse{" +
+				"tag='" + tag + '\'' +
+				'}';
+	}
+}

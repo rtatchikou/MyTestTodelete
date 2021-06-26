@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupListResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropbox</a> &gt; <a href="index.source.html" class="el_package">com.lyncwork.services.dropbox.client.dropbox.model.response.group.list</a> &gt; <span class="el_source">GroupListResponse.java</span></div><h1>GroupListResponse.java</h1><pre class="source lang-java linenums">package com.lyncwork.services.dropbox.client.dropbox.model.response.group.list;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.group.GroupInfoResponse;
+
+import java.util.List;
+
+
+@JsonInclude(Include.NON_NULL)
+<span class="nc" id="L12">public class GroupListResponse {</span>
+	
+	@JsonProperty(&quot;groups&quot;)
+	private List&lt;GroupInfoResponse&gt; groups;
+
+	@JsonProperty(&quot;cursor&quot;)
+	private String cursor;
+	
+	@JsonProperty(&quot;has_more&quot;)
+	private boolean hasMore;
+
+	public List&lt;GroupInfoResponse&gt; getGroups() {
+<span class="nc" id="L24">		return groups;</span>
+	}
+
+	public void setGroups(List&lt;GroupInfoResponse&gt; groups) {
+<span class="nc" id="L28">		this.groups = groups;</span>
+<span class="nc" id="L29">	}</span>
+
+	public String getCursor() {
+<span class="nc" id="L32">		return cursor;</span>
+	}
+
+	public void setCursor(String cursor) {
+<span class="nc" id="L36">		this.cursor = cursor;</span>
+<span class="nc" id="L37">	}</span>
+
+	public boolean isHasMore() {
+<span class="nc" id="L40">		return hasMore;</span>
+	}
+
+	public void setHasMore(boolean hasMore) {
+<span class="nc" id="L44">		this.hasMore = hasMore;</span>
+<span class="nc" id="L45">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L49">		return &quot;GroupListResponse{&quot; +</span>
+				&quot;groups=&quot; + groups +
+				&quot;, cursor='&quot; + cursor + '\'' +
+				&quot;, hasMore=&quot; + hasMore +
+				'}';
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

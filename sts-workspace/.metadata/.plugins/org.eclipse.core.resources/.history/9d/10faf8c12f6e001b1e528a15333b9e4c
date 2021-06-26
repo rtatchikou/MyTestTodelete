@@ -1,0 +1,26 @@
+SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/dropbox?useLegacyDatetimeCode=false&serverTimezone=UTC
+SPRING_DATASOURCE_USER: root
+SPRING_DATASOURCE_PASSWORD:
+
+jhipster:
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+
+FRONTEND_APP_URL: http://localhost:3000
+DOMAIN: localhost
+FRONTDOOR_BASEPATH: http://localhost:8080
+STORE_BASEPATH: http://localhost:8080/services/store
+
+
+dropbox:
+  space: local_development
+  app_key: g6hceli41v0dyeg
+  app_secret: 782b7o0wiyhseg9
+  redirect_url: http://localhost:8091/redirect/dropbox

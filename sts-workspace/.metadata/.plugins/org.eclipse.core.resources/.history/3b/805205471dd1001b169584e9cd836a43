@@ -1,0 +1,16 @@
+package com.efunzo.be.trainig;
+
+public class Main {
+	
+	public static void randomMovie() {
+		
+		int ran =(int) (Math.random() * 7)+1;
+		
+	}
+	
+	public static void main(String[] args) {
+		int ran =(int) (Math.random() * 7)+1;
+		System.out.println(ran);
+	}
+
+}

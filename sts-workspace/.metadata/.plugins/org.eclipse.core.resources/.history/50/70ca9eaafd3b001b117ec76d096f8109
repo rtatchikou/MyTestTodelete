@@ -1,0 +1,55 @@
+package com.lyncwork.services.gusto.service.IntgrationService;
+
+import com.lyncwork.services.expensify.domain.UserIntegrationQueue;
+import com.lyncwork.services.expensify.domain.UserIntegrationStatus;
+import com.lyncwork.services.expensify.repository.UserIntegrationQueueRepository;
+import com.lyncwork.services.expensify.service.dto.UserIntegrationQueueDTO;
+import com.lyncwork.services.gusto.service.mapper.UserIntegrationQueueMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Service Implementation for managing {@link UserIntegrationQueue}.
+ */
+@Service
+@Transactional
+public class UserIntegrationQueueService {
+    private final Logger log = LoggerFactory.getLogger(UserIntegrationQueueService.class);
+
+    private UserIntegrationQueueRepository userIntegrationQueueRepository;
+
+    private UserIntegrationQueueMapper userIntegrationQueueMapper;
+
+    public UserIntegrationQueueService(UserIntegrationQueueRepository userIntegrationQueueRepository, UserIntegrationQueueMapper userIntegrationQueueMapper) {
+        this.userIntegrationQueueRepository = userIntegrationQueueRepository;
+        this.userIntegrationQueueMapper = userIntegrationQueueMapper;
+    }
+
+    /**
+     * Save a userIntegrationQueue.
+     *
+     * @param userIntegrationQueueDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public UserIntegrationQueueDTO save(UserIntegrationQueueDTO userIntegrationQueueDTO) {
+        log.debug("Request to save UserIntegrationQueue : {}", userIntegrationQueueDTO);
+        UserIntegrationQueue userIntegrationQueue = userIntegrationQueueMapper.toEntity(userIntegrationQueueDTO);
+
+        userIntegrationQueue = userIntegrationQueueRepository.save(userIntegrationQueue);
+        return userIntegrationQueueMapper.toDto(userIntegrationQueue);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserIntegrationQueueDTO> findAllByConsumerAndStatus(String consumer, UserIntegrationStatus status) {
+        return  userIntegrationQueueRepository
+            .findAllByConsumerIgnoreCaseAndStatus(consumer, status)
+            .stream()
+            .map(userIntegrationQueueMapper::toDto)
+            .collect(Collectors.toList());
+    }
+}

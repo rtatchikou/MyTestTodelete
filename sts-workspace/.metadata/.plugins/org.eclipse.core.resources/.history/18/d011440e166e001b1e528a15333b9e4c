@@ -1,0 +1,20 @@
+package com.lyncwork.services.dropbox.security;
+
+import org.apache.commons.lang3.StringUtils;
+
+public class BearerTokenHolder {
+
+    private static ThreadLocal<String> jwtToken = new InheritableThreadLocal<>();
+
+    public static boolean isSet(){
+        return !StringUtils.isEmpty(jwtToken.get());
+    }
+
+    public static void set(String token) {
+        jwtToken.set(token);
+    }
+
+    public static String get() {
+        return jwtToken.get();
+    }
+}

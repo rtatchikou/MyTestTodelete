@@ -1,0 +1,51 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.request.group.add;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
+public class CreateGroupRequest {
+	
+	@JsonProperty("group_name")
+	private String groupName;
+	
+	@JsonProperty("add_creator_as_owner")
+	private boolean addCreatorAsOwner;
+	
+	@JsonProperty("group_external_id")
+	private String groupExternalId;
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public boolean isAddCreatorAsOwner() {
+		return addCreatorAsOwner;
+	}
+
+	public void setAddCreatorAsOwner(boolean addCreatorAsOwner) {
+		this.addCreatorAsOwner = addCreatorAsOwner;
+	}
+
+	public String getGroupExternalId() {
+		return groupExternalId;
+	}
+
+	public void setGroupExternalId(String groupExternalId) {
+		this.groupExternalId = groupExternalId;
+	}
+
+	@Override
+	public String toString() {
+		return "CreateGroupRequest{" +
+				"groupName='" + groupName + '\'' +
+				", addCreatorAsOwner=" + addCreatorAsOwner +
+				", groupExternalId='" + groupExternalId + '\'' +
+				'}';
+	}
+}

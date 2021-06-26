@@ -1,0 +1,26 @@
+member.url=https://api.dropboxapi.com/2/team/members
+team.folder.url=https://api.dropboxapi.com/2/team/team_folder
+group.url=https://api.dropboxapi.com/2/team/groups
+auth.url=https://api.dropboxapi.com/oauth2/token
+files.url=https://api.dropboxapi.com/2/files
+sharing.url=https://api.dropboxapi.com/2/sharing
+content.url=https://content.dropboxapi.com/2/files
+namespaces.url=https://api.dropboxapi.com/2/team/namespaces
+
+#access token
+<<<<<<< Updated upstream
+app.key=4dgt6ko1ba1qxze
+app.secret=n1i5rvnakz7ox0b
+=======
+app.key=ew34uexwv4p4msw
+app.secret=pu3hda0u0n7yjlt
+>>>>>>> Stashed changes
+
+#get by accessing this url while client_id is app.key  and required to login as dropbox team admin
+#https://www.dropbox.com/oauth2/authorize?client_id=ew34uexwv4p4msw&token_access_type=offline&response_type=code
+access.code=KdSx1KoBSbAAAAAAAAAAg7LF-Y13qHl43NBxj1su8UY
+
+#mongodb
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=my-dropbox

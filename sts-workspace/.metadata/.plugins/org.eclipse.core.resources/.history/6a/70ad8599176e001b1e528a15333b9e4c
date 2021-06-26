@@ -1,0 +1,42 @@
+package com.lyncwork.services.hellosign.web.rest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lyncwork.services.hellosign.client.dropbox.model.request.teamfolder.ApiPathRoot;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.teamfolder.create.CreateTeamFolderRequest;
+import com.lyncwork.services.hellosign.client.hellosign.service.TeamFolderService;
+import com.lyncwork.services.hellosign.client.hellosign.utils.JsonUtils;
+
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class TeamFolderResource {
+
+    @Autowired
+    private TeamFolderService teamFolderService;
+
+    @PostMapping("/teamfolder/{name}")
+    public ResponseEntity<String> createTeamFolder(@PathVariable String name) throws URISyntaxException {
+
+        String apiPathRoot = JsonUtils.writeValueAsString(new ApiPathRoot("namespace_id", "8918115488")) ;
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Dropbox-API-Select-User", "dbmid:AAAWg9-pad9IgTbboFx89sXmjPZINsHn37k");
+        headers.put("Dropbox-API-Path-Root", apiPathRoot);
+        teamFolderService.createTeamFolder(new CreateTeamFolderRequest("/"+name, false), headers);
+
+        return ResponseEntity.ok().body(apiPathRoot);
+    }
+
+
+
+
+}

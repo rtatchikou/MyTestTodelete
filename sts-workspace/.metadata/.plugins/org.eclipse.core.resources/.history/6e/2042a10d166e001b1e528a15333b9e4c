@@ -1,0 +1,20 @@
+package com.lyncwork.services.dropbox.client.dropbox.model.request.teamfolder;
+
+public enum SyncSettingTag {
+	DEFAULT("default"), NOT_SYNCED("not_synced");
+
+
+	private String code;
+
+	private SyncSettingTag(String code) {
+		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+}

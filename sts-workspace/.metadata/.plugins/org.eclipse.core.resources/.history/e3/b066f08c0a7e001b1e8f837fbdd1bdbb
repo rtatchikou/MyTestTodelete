@@ -1,0 +1,29 @@
+package com.lyncwork.services.hellosign.domain;
+
+import javax.annotation.Generated;
+import javax.persistence.metamodel.SetAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+
+@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
+@StaticMetamodel(File.class)
+public abstract class File_ {
+
+	public static volatile SingularAttribute<File, String> hellosignFileId;
+	public static volatile SetAttribute<File, User> sharers;
+	public static volatile SingularAttribute<File, String> fileName;
+	public static volatile SingularAttribute<File, String> filePath;
+	public static volatile SingularAttribute<File, String> externalGroupId;
+	public static volatile SingularAttribute<File, Long> id;
+	public static volatile SingularAttribute<File, User> fileOwner;
+
+	public static final String HELLOSIGN_FILE_ID = "hellosignFileId";
+	public static final String SHARERS = "sharers";
+	public static final String FILE_NAME = "fileName";
+	public static final String FILE_PATH = "filePath";
+	public static final String EXTERNAL_GROUP_ID = "externalGroupId";
+	public static final String ID = "id";
+	public static final String FILE_OWNER = "fileOwner";
+
+}
+

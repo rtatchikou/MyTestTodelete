@@ -1,0 +1,86 @@
+@startuml
+skinparam backgroundColor #EEEBDC
+skinparam sequence {
+	ArrowColor DeepSkyBlue
+	LifeLineBorderColor blue
+	LifeLineBackgroundColor #A9DCDF
+
+	ParticipantBorderColor DeepSkyBlue
+	ParticipantBackgroundColor DodgerBlue
+	ParticipantFontSize 17
+	ParticipantFontColor #A9DCDF
+
+	ActorBackgroundColor aqua
+	ActorFontColor DeepSkyBlue
+	ActorFontSize 17
+	ActorFontName Aapex
+}
+
+participant FrontEnd
+participant LWDropboxService
+participant DropboxServer
+
+title Upload File
+autonumber  " <font color=red><b>[0]"
+FrontEnd -> FrontEnd :
+
+note right
+POST /api/upload
+Body:
+MultipartFile file
+
+Header:
+Signed JWT token
+containing userName
+tenantId and ADMIN authority
+end note
+FrontEnd -> LWDropboxService : POST /api/upload
+LWDropboxService -> LWDropboxService: validateJWTToken()
+alt alt has ADMIN authority, tenantId != null, userName !=null
+LWDropboxService -> LWDropboxService: findCompanyByTenantId()
+opt tenant not found in database
+LWDropboxService -> FrontEnd : 500: Internal Server Error
+end opt
+LWDropboxService -> LWDropboxService: findLWAdminIdFromLocalCache()
+opt lWAdmin does not exist in local cache
+note right
+POST /team/members/list
+Body:
+dropbox admin userId
+root namespaceId
+
+Header:
+refreshable auth token
+stored in database
+end note
+LWDropboxService -> DropboxServer : POST /team/members/list
+
+DropboxServer --> LWDropboxService : ListMemberResponse
+LWDropboxService -> LWDropboxService: putLWAdminIdIntoTheLocalCache()
+end opt
+note right
+POST /files/upload
+Body:
+dropbox admin userId
+root namespaceId
+MultipartFile file
+
+Header:
+refreshable auth token
+stored in database
+end note
+LWDropboxService -> DropboxServer : POST /files/upload
+DropboxServer --> LWDropboxService : ContentUploadResponse
+
+LWDropboxService -> LWDropboxService: findUserByUserNameAndCompanyId()
+opt userName does not exist database
+LWDropboxService -> LWDropboxService: addUserToDatabase()
+end opt
+LWDropboxService -> LWDropboxService: addFileToDatabase()
+LWDropboxService -> FrontEnd : UploadResponse
+else
+LWDropboxService -> FrontEnd : 401 UnAuthorize
+end alt
+
+
+@enduml

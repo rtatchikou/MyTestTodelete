@@ -1,0 +1,43 @@
+package com.lyncwork.services.dropbox.model.response;
+
+import java.io.Serializable;
+
+public class DownloadResponseHeader implements Serializable {
+
+    private String name;
+    private String id;
+    private Long size;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "DownloadResponseHeader{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", size=" + size +
+                '}';
+    }
+}

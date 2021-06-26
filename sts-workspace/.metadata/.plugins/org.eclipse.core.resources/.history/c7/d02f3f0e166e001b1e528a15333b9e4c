@@ -1,0 +1,150 @@
+package com.lyncwork.services.dropbox.repository.hibernate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.thymeleaf.util.StringUtils;
+
+import java.net.URL;
+import java.util.Locale;
+import java.util.Optional;
+
+@Component
+public class TenantContext {
+    private static final Logger logger = LoggerFactory.getLogger(TenantContext.class);
+
+    private static ThreadLocal<String> currentTenant = new InheritableThreadLocal<>();
+    private static ThreadLocal<URL> currentReferer = new InheritableThreadLocal<>();
+    public static final String DEFAULT_SCHEMA = "PUBLIC";
+
+    private static String domain;
+
+    private static String storeBasePath;
+
+    private static String frontendAppUrl;
+
+    private static String frontDoorBasePath;
+
+    public static String getCurrentTenant() {
+        return currentTenant.get();
+    }
+
+    public static void setTenant(String tenant) {
+        currentTenant.set(tenant);
+    }
+
+    public static Optional<String> getRefererScheme(){
+        return currentReferer.get() != null ? Optional.of(currentReferer.get().getProtocol()) : Optional.empty();
+    }
+
+    public static Optional<String> getRefererPort(){
+        if(currentReferer.get() != null){
+            int port = currentReferer.get().getPort();
+            return port != -1 ? Optional.of(String.format("%d", port)) : Optional.empty();
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<String> getRefererHost(){
+        return currentReferer.get() != null ? Optional.of(currentReferer.get().getHost()) : Optional.empty();
+    }
+
+    public static Optional<String> getRefererDomain(){
+        if (currentReferer.get() != null){
+            String tenant = getCurrentTenant();
+            String host = currentReferer.get().getHost();
+            host = StringUtils.replace(host, StringUtils.toLowerCase(tenant, Locale.ENGLISH) + ".", "");
+            host = StringUtils.replace(host, "api.", "");
+            return Optional.of(host);
+        }
+
+        return Optional.empty();
+    }
+
+    public static String getDomain() {
+        String result = domain;
+
+        Optional<String> host = getRefererHost();
+        if (host != null && !host.isEmpty()){
+            logger.debug(" Referer Host: {}", host.get());
+
+            if (StringUtils.equals("localhost", host.get())) {
+                result = host.get();
+            }
+        }
+
+        logger.debug(" Domain: {}", result);
+        return result;
+    }
+
+    public static String getFrontendDomain() {
+        String domain = frontendAppUrl;
+
+        Optional<String> host = getRefererHost();
+        if (host != null && !host.isEmpty()) {
+            logger.debug(" Referer Host: {}", host.get());
+
+            if (!StringUtils.equals("localhost", host.get())) {
+                String scheme = "https";
+
+                domain= getDomain();
+                domain= StringUtils.prepend(domain, TenantContext.getCurrentTenant().toLowerCase()+".");
+
+                if (domain != null) {
+                    domain = String.format("%s://%s", scheme, domain);
+                }
+            }
+        }
+
+        logger.debug(" Frontend Domain: {}", domain);
+        return domain;
+    }
+
+    public static String getStoreDomain() {
+        String domain = storeBasePath;
+
+        logger.debug(" Store Domain: {}", domain);
+        return domain;
+    }
+
+    public static String getFrontdoorDomain() {
+        String domain = frontDoorBasePath;
+
+        logger.debug(" Frontdoor Domain: {}", domain);
+        return domain;
+    }
+
+    public static URL getCurrentReferer() {
+        return currentReferer.get();
+    }
+
+    public static void setCurrentReferer(URL currentReferer) {
+        TenantContext.currentReferer.set(currentReferer);
+    }
+
+    public static void clear() {
+        currentTenant.remove();
+        currentReferer.remove();
+    }
+
+    @Value("${lyncworks.domain}")
+    public void setDomain(String domain){
+        TenantContext.domain = domain;
+    }
+
+    @Value("${lyncworks.store.basePath}")
+    public void setStoreBasePath(String url){
+        TenantContext.storeBasePath = url;
+    }
+
+    @Value("${lyncworks.frontend.app.url}")
+    public void setFrontendAppUrl(String url){
+        TenantContext.frontendAppUrl = url;
+    }
+
+    @Value("${lyncworks.frontDoor.basePath}")
+    public void setFrontDoorBasePath(String url){
+        TenantContext.frontDoorBasePath = url;
+    }
+}

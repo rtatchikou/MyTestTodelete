@@ -1,0 +1,31 @@
+package com.lyncwork.services.dropbox.client.dropbox.histrix.teamfolder;
+
+import com.lyncwork.services.dropbox.client.dropbox.client.teamfolder.ContentClientFeign;
+import com.lyncwork.services.dropbox.client.dropbox.config.CustomInputStream;
+import com.lyncwork.services.dropbox.client.dropbox.model.response.teamfolder.content.ContentUploadResponse;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+@Component
+public class ContentFallback implements ContentClientFeign {
+
+	@Override
+	public ContentUploadResponse upload( byte[] data, Map<String, String> headers){
+		return null;
+	}
+
+	@Override
+	public CustomInputStream download(Map<String, String> headers){
+		return null;
+	}
+
+}
+
+
+
+
+
+
+
+

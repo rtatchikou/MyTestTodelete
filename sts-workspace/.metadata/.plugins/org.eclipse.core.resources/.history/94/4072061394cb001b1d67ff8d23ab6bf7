@@ -1,0 +1,16 @@
+package com.ifunzo.be.training;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		Car car = new Car();
+		car.engine= "##A";
+		car.setModel("Honda");
+		car.setModel("Toyota");
+	System.out.print("My car model is: "+ car.getModel());
+		
+		
+	}
+
+}

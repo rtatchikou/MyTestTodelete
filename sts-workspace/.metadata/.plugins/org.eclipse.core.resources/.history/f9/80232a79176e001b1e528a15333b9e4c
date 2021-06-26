@@ -1,0 +1,55 @@
+package com.lyncwork.services.hellosign.client.dropbox.model.request.group;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.group.add.CreateGroupRequest;
+import com.lyncwork.services.hellosign.client.dropbox.model.request.member.MemberRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+@JsonInclude(Include.NON_NULL)
+public class BackupRequest {
+	
+	@JsonProperty("group")
+	private CreateGroupRequest group;
+	
+	@JsonProperty("members")
+	private List<MemberRequest> members;
+
+	@JsonProperty("return_members")
+	private boolean returnMembers;
+
+	public CreateGroupRequest getGroup() {
+		return group;
+	}
+
+	public void setGroup(CreateGroupRequest group) {
+		this.group = group;
+	}
+
+	public List<MemberRequest> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<MemberRequest> members) {
+		this.members = members;
+	}
+
+	public boolean isReturnMembers() {
+		return returnMembers;
+	}
+
+	public void setReturnMembers(boolean returnMembers) {
+		this.returnMembers = returnMembers;
+	}
+
+	@Override
+	public String toString() {
+		return "BackupRequest{" +
+				"group=" + group +
+				", members=" + members +
+				", returnMembers=" + returnMembers +
+				'}';
+	}
+}
