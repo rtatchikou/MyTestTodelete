@@ -1,5 +1,0 @@
-package com.lyncwork.services.gusto.domain;
-
-public enum UserIntegrationAction{
-    DEPROVISION, PROVISION;
-}

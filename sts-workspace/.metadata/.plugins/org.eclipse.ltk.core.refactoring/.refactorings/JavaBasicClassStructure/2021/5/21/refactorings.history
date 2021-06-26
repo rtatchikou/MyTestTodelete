@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename package &apos;com.efunzo.be.training&apos; to &apos;com.efunzo.be.training.basicclass&apos;&#x0A;- Original project: &apos;JavaBasicClassStructure&apos;&#x0A;- Original element: &apos;JavaBasicClassStructure/src/com.efunzo.be.training&apos;&#x0A;- Renamed element: &apos;JavaBasicClassStructure/src/com.efunzo.be.training.basicclass&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings&#x0A;- Rename subpackages of the package" description="Rename package &apos;com.efunzo.be.training&apos;" flags="589830" hierarchical="true" id="org.eclipse.jdt.ui.rename.package" input="/src&lt;com.efunzo.be.training" name="com.efunzo.be.training.basicclass" qualified="false" references="true" stamp="1621703702687" textual="false" version="1.0"/>
-</session>

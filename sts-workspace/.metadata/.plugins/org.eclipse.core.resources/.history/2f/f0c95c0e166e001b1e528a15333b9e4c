@@ -1,4 +1,0 @@
-/**
- * Spring MVC REST controllers.
- */
-package com.lyncwork.services.dropbox.web.rest;

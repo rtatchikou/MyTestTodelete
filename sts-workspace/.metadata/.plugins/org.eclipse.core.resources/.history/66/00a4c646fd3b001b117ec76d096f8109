@@ -1,4 +1,0 @@
-/**
- * JPA domain objects.
- */
-package com.lyncwork.services.gusto.domain;

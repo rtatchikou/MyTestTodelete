@@ -1,6 +1,0 @@
-server.url=https://integrations.expensify.com/Integration-Server/ExpensifyIntegrations
-partner.user.id=aa_lifefortress_gmail_com
-partner.user.secret=02d4873c27cfb55036a74b1db7292a2249c7a91f
-
-#logging.level.org.apache.http=DEBUG
-#logging.level.httpclient.wire=DEBUG

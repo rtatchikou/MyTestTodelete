@@ -1,7 +1,0 @@
-package com.efunzo.be.training;
-
-public interface CanFly {
-	
-	void run(int speed);
-
-}

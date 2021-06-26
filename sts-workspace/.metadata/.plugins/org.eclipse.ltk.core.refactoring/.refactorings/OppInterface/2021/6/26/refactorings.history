@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;CanRun.java&apos; to &apos;OppInterface/src/com.efunzo.be.training&apos;&#x0A;- Original project: &apos;OppInterface&apos;&#x0A;- Destination element: &apos;OppInterface/src/com.efunzo.be.training&apos;&#x0A;- Original element: &apos;com.efunzo.be.training.CanRun.java&apos;" description="Copy compilation unit" destination="/src&lt;com.efunzo.be.training" element1="/src&lt;com.efunzo.be.training{CanRun.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1624202816311" units="1" version="1.0"/>
-</session>

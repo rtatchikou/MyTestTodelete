@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Delete 5 resources" deleteContents="false" description="Delete 5 resources" element1="/front-door" element2="/frontdoor-service-client" element3="/platforms-parent" element4="/store" element5="/store-service-client" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="5" stamp="1605131365650"/>&#x0A;<refactoring comment="Delete 5 resources" deleteContents="false" description="Delete 5 resources" element1="/front-door" element2="/frontdoor-service-client" element3="/platforms-parent" element4="/store" element5="/store-service-client" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="5" stamp="1605131980509"/>
-</session>
